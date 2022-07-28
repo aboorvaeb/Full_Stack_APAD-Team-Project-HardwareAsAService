@@ -6,10 +6,10 @@ import '../../App.css'
 export default function SignInPage() {
     return (
         <div className="text-center m-5-auto">
-            <h2>Sign in to us</h2>
+            <h2>User Login</h2>
             <form action="/home">
                 <p>
-                    <label>Username or email address</label><br/>
+                    <label>Username </label><br/>
                     <input type="text" name="first_name" required />
                 </p>
                 <p>
