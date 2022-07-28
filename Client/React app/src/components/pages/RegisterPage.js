@@ -7,19 +7,19 @@ export default function SignUpPage() {
 
     return (
         <div className="text-center m-5-auto">
-            <h2>Join us</h2>
-            <h5>Create your personal account</h5>
+            <h2>User Registration</h2>
+            <h5>Create your account</h5>
             <form action="/home">
                 <p>
-                    <label>Username</label><br/>
+                    <label>Set Username</label><br/>
                     <input type="text" name="first_name" required />
                 </p>
                 <p>
-                    <label>Email address</label><br/>
+                    <label>Set Email address</label><br/>
                     <input type="email" name="email" required />
                 </p>
                 <p>
-                    <label>Password</label><br/>
+                    <label>Set Password</label><br/>
                     <input type="password" name="password" requiredc />
                 </p>
                 <p>
