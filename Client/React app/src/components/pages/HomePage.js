@@ -22,7 +22,7 @@ export default function HomePage() {
                 </p>
             </form>
             <footer>
-                <p><Link to="/register">Create a new project</Link>.</p>
+                <p><Link to="/newproject">Create a new project</Link>.</p>
             </footer>
         </div>
     )
