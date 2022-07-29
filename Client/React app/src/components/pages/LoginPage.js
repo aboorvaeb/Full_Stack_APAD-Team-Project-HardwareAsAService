@@ -4,10 +4,17 @@ import { Link } from 'react-router-dom'
 import '../../App.css'
 
 export default function SignInPage() {
+
+    const [loginForm, setLoginForm] = useState({
+        user_name: "",
+        pwd: ""
+    })
+
+
     return (
         <div className="text-center m-5-auto">
             <h2>User Login</h2>
-            <form action="/home">
+            <form action="/home" className="login">
                 <p>
                     <label>Username </label><br/>
                     <input type="text" name="first_name" required />

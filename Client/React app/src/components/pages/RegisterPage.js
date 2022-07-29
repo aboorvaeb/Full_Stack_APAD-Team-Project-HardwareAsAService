@@ -1,9 +1,14 @@
-import React from 'react'
+import React, { useState } from 'react'
 import { Link } from 'react-router-dom'
 
 import '../../App.css'
 
 export default function SignUpPage({ userInput, onFormChange }) {
+
+    const [signupForm, setSignUpForm] = useState({
+        user_name: "",
+        pwd: ""
+    })
 
     const handleChange = (event) =>  {
         onFormChange(event.target.value)
@@ -13,10 +18,10 @@ export default function SignUpPage({ userInput, onFormChange }) {
         <div className="text-center m-5-auto">
             <h2>User Registration</h2>
             <h5>Create your account</h5>
-            <form action="/home">
+            <form action="/home" className='registration'>
                 <p>
                     <label>Set Username</label><br/>
-                    <input type="text" name="first_name" required />
+                    <input onChange={handleChange} type="text" name="user_name" required value={login} />
                 </p>
                 <p>
                     <label>Set Email address</label><br/>
