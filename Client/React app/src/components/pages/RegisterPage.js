@@ -3,7 +3,11 @@ import { Link } from 'react-router-dom'
 
 import '../../App.css'
 
-export default function SignUpPage() {
+export default function SignUpPage({ userInput, onFormChange }) {
+
+    const handleChange = (event) =>  {
+        onFormChange(event.target.value)
+    }
 
     return (
         <div className="text-center m-5-auto">
