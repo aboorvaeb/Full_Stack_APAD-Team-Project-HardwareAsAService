@@ -1,0 +1,28 @@
+# POST http://127.0.0.1:5000/verify_user HTTP/1.1
+# content-type: application/json
+
+# {
+#     "username":"Sanjo",
+#     "pwd":"helloworld"
+# }
+
+# GET http://127.0.0.1:5000/fetch_users HTTP/1.1
+# content-type: application/json
+
+
+# POST https://scrumbledore-server.herokuapp.com/verify_user HTTP/1.1
+# content-type: application/json
+
+# {
+#     "username":"Sanjo",
+#     "pwd":"helloworld"
+# }
+
+
+POST http://127.0.0.1:5000/add_user HTTP/1.1
+content-type: application/json
+
+{
+    "username":"Amrit",
+    "pwd":"helloworld2"
+}
