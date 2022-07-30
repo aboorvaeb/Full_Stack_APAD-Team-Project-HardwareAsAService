@@ -21,7 +21,7 @@ export default function SignUpPage({ userInput, onFormChange }) {
             <form action="/home" className='registration'>
                 <p>
                     <label>Set Username</label><br/>
-                    <input onChange={handleChange} type="text" name="user_name" required value={login} />
+                    <input onChange={handleChange} type="text" name="user_name" required/>
                 </p>
                 <p>
                     <label>Set Email address</label><br/>
