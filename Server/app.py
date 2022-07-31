@@ -18,19 +18,36 @@ db = mongodb_client.db
 @cross_origin()
 def add_user():
     __req_body = flask.request.get_json()
-    db.Users.insert_one({'username': __req_body['username'], 'pwd': __req_body['pwd']})
+    db.Users.insert_one({'username': __req_body['username'], 'pwd': __req_body['pwd'], 'projects':[]})
     return flask.jsonify(message="success")
 
 # Get list of all users
-@app.route("/fetch_users", methods=['GET'])
+@app.route("/get_users", methods=['GET'])
 @cross_origin()
 def get_users():
     __user = db.Users.find({})
     json_docs = []
     for document in __user:
-        json_doc = json.dumps(document, default=json_util.default)
-        json_docs.append(json_doc)
-    return flask.Response(json_docs, mimetype="application/json", status=200)
+        document.pop('pwd', None)
+        document.pop('_id', None)
+        # json_doc = json.dumps(document, default=json_util.default)
+        # print(document)
+        json_docs.append(document['username'])
+    # json_docs = json.dumps(json_docs, default=json_util.default)
+    # print(json_docs)
+    response = {"username":json_docs}
+    return json.dumps(response)
+
+# # Verify login. Checks username and password entered
+# @app.route("/verify_user", methods=['POST'])
+# @cross_origin()
+# def verify_user():
+#     __req_body = flask.request.get_json()
+#     __user = db.Users.find({})
+#     for document in __user:
+#         if (__req_body['username'] == document['username']) and (__req_body['pwd'] == document['pwd']):
+#             return flask.jsonify(message="success")
+#     return flask.jsonify(message="failed")
 
 # Verify login. Checks username and password entered
 @app.route("/verify_user", methods=['POST'])
@@ -40,9 +57,29 @@ def verify_user():
     __user = db.Users.find({})
     for document in __user:
         if (__req_body['username'] == document['username']) and (__req_body['pwd'] == document['pwd']):
-            return flask.jsonify(message="success")
+            if "projects" not in document.keys() or len(document["projects"])>0:
+                projects = []
+            else:
+                projects = document['projects']
+            response={"message":"success","projects":projects}
+            return json.dumps(response)
     return flask.jsonify(message="failed")
 
+# Get list of all projects
+@app.route("/get_allprojects", methods=['GET'])
+@cross_origin()
+def get_allprojects():
+    __project = db.Project.find({})
+    json_docs = []
+    for document in __project:
+        document.pop('_id', None)
+        json_doc = json.dumps(document, default=json_util.default)
+        # print(document)
+        json_docs.append(json_doc)
+    # json_docs = json.dumps(json_docs, default=json_util.default)
+    # print(json_docs)
+    # response = {"username":json_docs}
+    return json.dumps(json_docs)
 
 
 if __name__ == '__main__':
