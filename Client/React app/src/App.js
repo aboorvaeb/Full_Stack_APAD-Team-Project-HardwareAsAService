@@ -5,7 +5,7 @@ import LandingPage from './components/pages/LandingPage'
 import LoginPage from './components/pages/LoginPage'
 import RegisterPage from './components/pages/RegisterPage'
 import ForgetPasswordPage from './components/pages/ForgetPasswordPage'
-import HomePage from './components/pages/HomePage'
+import SelectProject from './components/pages/SelectProject'
 import NewProjectPage from './components/pages/NewProject'
 
 
@@ -20,7 +20,7 @@ export default function App() {
                     <Route path="/login" component={ LoginPage } />
                     <Route path="/register" component={ RegisterPage } />
                     <Route path="/forget-password" component={ ForgetPasswordPage } />
-                    <Route path="/home" component={ HomePage } />
+                    <Route path="/selectproject" component={ SelectProject } />
                     <Route path="/newproject" component={ NewProjectPage } />
                 </Switch>
                 <Footer />
