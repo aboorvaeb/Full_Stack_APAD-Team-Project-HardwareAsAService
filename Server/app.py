@@ -57,10 +57,11 @@ def verify_user():
     __user = db.Users.find({})
     for document in __user:
         if (__req_body['username'] == document['username']) and (__req_body['pwd'] == document['pwd']):
-            if "projects" not in document.keys() or len(document["projects"])>0:
+            if "projects" not in document.keys():
                 projects = []
             else:
-                projects = document['projects']
+                projects = document['projects'] if len(document["projects"])>0 else []
+
             response={"message":"success","projects":projects}
             return json.dumps(response)
     return flask.jsonify(message="failed")
