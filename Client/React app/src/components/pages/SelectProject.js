@@ -1,9 +1,24 @@
-import React from 'react'
+import React, { useState, useEffect } from 'react'
 import { Link } from 'react-router-dom'
 import Dropdown from 'react-bootstrap/Dropdown';
 import DropdownButton from 'react-bootstrap/DropdownButton';
 
 export default function HomePage() {
+
+    const [projects, setProjects] = useState([]);
+
+    const [selectedProject, setSelectedProject] = useState('');
+
+    useEffect(() => {
+        fetch('/verify_user')
+          .then(res => res.json())
+          .then(data => {
+            setProjects(data);
+          });
+      }, []);
+    
+
+
     return (
         <div className="text-center m-5-auto">
             <h2>Select Project</h2>
@@ -20,6 +35,16 @@ export default function HomePage() {
                 <p>
                     <button id="sub_btn" type="submit">Proceed</button>
                 </p>
+
+                <div>
+                 <div>Selected Project: {selectedProject}</div>
+                 <select onChange={e => setSelectedProject(e.target.value)}>
+                <option value="">Select Project</option>
+                        {projects.map(project => (
+                        <option key={project.id}>{project.name}</option>
+                    ))}
+      </select>
+    </div>
             </form>
             <footer>
                 <p><Link to="/newproject">Create a new project</Link>.</p>

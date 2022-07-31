@@ -10,7 +10,7 @@ export default function SignUpPage() {
     return (
         <div className="text-center m-5-auto">
             <h2>Add a project</h2>
-            <form action="/home">
+            <form action="/selectproject">
                 <p>
                     <label>Set Project ID</label><br/>
                     <input type="text" name="project ID" required />

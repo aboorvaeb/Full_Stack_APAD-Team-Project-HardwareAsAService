@@ -14,8 +14,6 @@ export default function SignInPage() {
     const [response, setShowResponse] = useState(false);
 
     function callApi() {
-      let path = "/newproject"; 
-      
         // Simple POST request with a JSON body using fetch
         const requestOptions = {
             method: 'POST',
@@ -26,7 +24,7 @@ export default function SignInPage() {
             .then(data => data.json())
             .then(json => {
               //alert(JSON.stringify(json)))
-              if(json.message === "success")  {window.location.href = "/home"}
+              if(json.message === "success")  {window.location.href = "/selectproject"}
               else alert(JSON.stringify(json))
             })
           
