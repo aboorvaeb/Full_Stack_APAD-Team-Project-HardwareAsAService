@@ -6,7 +6,7 @@
 #     "pwd":"helloworld"
 # }
 
-# GET http://127.0.0.1:5000/fetch_users HTTP/1.1
+# GET http://127.0.0.1:5000/get_users HTTP/1.1
 # content-type: application/json
 
 
@@ -19,10 +19,62 @@
 # }
 
 
-POST http://127.0.0.1:5000/add_user HTTP/1.1
+
+# POST http://127.0.0.1:5000/add_user HTTP/1.1
+# content-type: application/json
+
+# {
+#     "username":"Amrit",
+#     "pwd":"helloworld2"
+# }
+
+# GET http://127.0.0.1:5000/get_allprojects HTTP/1.1
+# content-type: application/json
+
+
+# POST http://127.0.0.1:5000/add_project HTTP/1.1
+# content-type: application/json
+
+# {
+#     "projectid":"Project3",
+#     "projectdesc":"helloworld",
+#     "users":["Sanjo", "Amrit"]
+# }
+
+# POST http://127.0.0.1:5000/get_project HTTP/1.1
+# content-type: application/json
+
+# {
+#     "projectid":"Project2"
+# }
+
+# POST https://scrumbledore-server.herokuapp.com/add_project HTTP/1.1
+# content-type: application/json
+
+# {
+#     "projectid":"Project4",
+#     "projectdesc":"Project Desc4",
+#     "users":["Sanjo", "Amrit"]
+# }
+
+# POST https://scrumbledore-server.herokuapp.com/get_project HTTP/1.1
+# content-type: application/json
+
+# {
+#     "projectid":"Project2"
+# }
+
+
+# GET http://127.0.0.1:5000/get_hardwareset HTTP/1.1
+# content-type: application/json
+
+
+# GET https://scrumbledore-server.herokuapp.com/get_hardwareset HTTP/1.1
+# content-type: application/json
+
+POST https://react-flask-sanjo.herokuapp.com/get_surname HTTP/1.1
 content-type: application/json
 
 {
-    "username":"Amrit",
-    "pwd":"helloworld2"
+    name: "Sanjo"
 }

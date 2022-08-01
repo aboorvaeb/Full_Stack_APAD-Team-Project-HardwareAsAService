@@ -66,22 +66,61 @@ def verify_user():
             return json.dumps(response)
     return flask.jsonify(message="failed")
 
-# Get list of all projects
-@app.route("/get_allprojects", methods=['GET'])
+# Add project
+@app.route("/add_project", methods=['POST'])
 @cross_origin()
-def get_allprojects():
+def add_project():
+    __req_body = flask.request.get_json()
+    db.Project.insert_one({'projectid': __req_body['projectid'], 'projectdesc': __req_body['projectdesc'], 'users':__req_body['users'], 'resources':{}})
+    return flask.jsonify(message="success")
+
+# # Get list of all projects
+# @app.route("/get_allprojects", methods=['GET'])
+# @cross_origin()
+# def get_allprojects():
+#     __project = db.Project.find({})
+#     json_docs = []
+#     for document in __project:
+#         document.pop('_id', None)
+#         json_doc = json.dumps(document, default=json_util.default)
+#         # print(document)
+#         json_docs.append(json_doc)
+#     # json_docs = json.dumps(json_docs, default=json_util.default)
+#     # print(json_docs)
+#     # response = {"username":json_docs}
+#     return json.dumps(json_docs)
+
+# Get project details. Checks projectid passed
+@app.route("/get_project", methods=['POST'])
+@cross_origin()
+def get_project():
+    __req_body = flask.request.get_json()
     __project = db.Project.find({})
-    json_docs = []
     for document in __project:
+        if (__req_body['projectid'] == document['projectid']):
+            document.pop('_id', None)
+            print(document)
+            return json.dumps(document, default=json_util.default)
+
+            # response={"message":"success","projects":projects}
+            # return json.dumps(response)
+    return flask.jsonify(message="Failed: No such projectid")
+
+# # Get list of all projects
+@app.route("/get_hardwareset", methods=['GET'])
+@cross_origin()
+def get_hardwareset():
+    __hardwareSet = db.HardwareSet.find({})
+    json_docs = []
+    for document in __hardwareSet:
         document.pop('_id', None)
-        json_doc = json.dumps(document, default=json_util.default)
+        # json_doc = json.dumps(document, default=json_util.default)
         # print(document)
-        json_docs.append(json_doc)
+        json_docs.append(document)
     # json_docs = json.dumps(json_docs, default=json_util.default)
     # print(json_docs)
     # response = {"username":json_docs}
-    return json.dumps(json_docs)
-
+    return json.dumps(json_docs, default=json_util.default)
 
 if __name__ == '__main__':
     app.run()
