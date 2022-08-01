@@ -25,7 +25,7 @@ export default function App() {
                     <Route path="/newproject" component={ NewProjectPage } />
                     <Route path="/resourcemanagement" component={ ResourceManagementPage } />
                 </Switch>
-                <Footer />
+                {/* <Footer /> */}
             </div>
         </Router>
     )
