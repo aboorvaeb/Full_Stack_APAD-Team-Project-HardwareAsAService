@@ -12,20 +12,16 @@ export default function HomePage(props) {
     const [selectedProject, setSelectedProject] = useState('');
     let projects = []
     const location = useLocation()
+
     projects = location.state
     console.log(projects)
 
-    function callApi(selectedProject) {
-
+    function callApi() {
         history.push({
             pathname: "/resourcemanagement",
             state: selectedProject  
-          });
-
-          
-        
+          });        
     }
-      
 
     
     return (
@@ -47,9 +43,9 @@ export default function HomePage(props) {
                     ))}    
                 </select>
                 </div>
-                <Link to="/resourcemanagement">
-                    <button className="primary-button">Proceed</button>
-                </Link>
+                {/* <Link to="/resourcemanagement"> */}
+                    <button onClick={callApi} className="primary-button">Proceed</button>
+                {/* </Link> */}
             </form>
             <footer>
                 <p><Link to="/newproject">Create a new project</Link>.</p>
