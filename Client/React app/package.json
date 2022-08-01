@@ -2,14 +2,14 @@
   "name": "react-login-page",
   "version": "0.1.0",
   "private": true,
-  "proxy" : "https://scrumbledore-server.herokuapp.com",
+  "proxy": "https://scrumbledore-server.herokuapp.com",
   "dependencies": {
     "axios": "^0.27.2",
     "bootstrap": "^5.2.0",
     "react": "^16.8.6",
     "react-bootstrap": "^2.4.0",
     "react-dom": "^16.8.6",
-    "react-router-dom": "^5.0.1",
+    "react-router-dom": "^5.3.3",
     "react-scripts": "3.0.1"
   },
   "scripts": {
