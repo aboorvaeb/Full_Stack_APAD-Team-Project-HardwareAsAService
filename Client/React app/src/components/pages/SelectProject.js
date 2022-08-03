@@ -17,11 +17,28 @@ export default function HomePage(props) {
     console.log(projects)
 
     function callApi() {
-        history.push({
-            pathname: "/resourcemanagement",
-            state: selectedProject  
-          });        
+
+        const requestOptions = {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({"projectid": selectedProject})
+        };
+        
+        fetch('/get_project', requestOptions)
+            .then(data => data.json())
+            .then(json => {
+              alert(JSON.stringify(json))
+              handleState(json);
+            })
+        
     }
+
+    function handleState(temp) {
+        history.push({
+          pathname: "/resourcemanagement",
+          state: temp
+        });
+      }
 
     
     return (
@@ -32,8 +49,7 @@ export default function HomePage(props) {
         <div className="text-center m-5-auto">
             
             <h2>Select Project</h2>
-            <form action="/resourcemanagement">
-                
+            <form action="/selectproject">     
                 <div>
                  <div>Selected Project: {selectedProject}</div>
                  <select onChange={e => setSelectedProject(e.target.value)}>
@@ -43,10 +59,10 @@ export default function HomePage(props) {
                     ))}    
                 </select>
                 </div>
-                {/* <Link to="/resourcemanagement"> */}
-                    <button onClick={callApi} className="primary-button">Proceed</button>
-                {/* </Link> */}
             </form>
+            
+            <button onClick={callApi} className="primary-button">Proceed</button>
+                
             <footer>
                 <p><Link to="/newproject">Create a new project</Link>.</p>
             </footer>
