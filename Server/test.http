@@ -6,6 +6,8 @@
 #     "pwd":"helloworld"
 # }
 
+
+
 # GET http://127.0.0.1:5000/get_users HTTP/1.1
 # content-type: application/json
 
@@ -20,7 +22,7 @@
 
 
 
-# POST http://127.0.0.1:5000/add_user HTTP/1.1
+# POST https://scrumbledore-server.herokuapp.com/add_user HTTP/1.1
 # content-type: application/json
 
 # {
@@ -36,7 +38,7 @@
 # content-type: application/json
 
 # {
-#     "projectid":"Project3",
+#     "projectid":"Project4",
 #     "projectdesc":"helloworld",
 #     "users":["Sanjo", "Amrit"]
 # }
@@ -45,15 +47,15 @@
 # content-type: application/json
 
 # {
-#     "projectid":"Project2"
+#     "projectid":"Project1"
 # }
 
 # POST https://scrumbledore-server.herokuapp.com/add_project HTTP/1.1
 # content-type: application/json
 
 # {
-#     "projectid":"Project4",
-#     "projectdesc":"Project Desc4",
+#     "projectid":"Project5",
+#     "projectdesc":"Project Desc5",
 #     "users":["Sanjo", "Amrit"]
 # }
 
@@ -61,7 +63,7 @@
 # content-type: application/json
 
 # {
-#     "projectid":"Project2"
+#     "projectid":"Project1"
 # }
 
 
@@ -72,9 +74,76 @@
 # GET https://scrumbledore-server.herokuapp.com/get_hardwareset HTTP/1.1
 # content-type: application/json
 
-POST https://react-flask-sanjo.herokuapp.com/get_surname HTTP/1.1
+# # POST https://react-flask-sanjo.herokuapp.com/get_surname HTTP/1.1
+# # content-type: application/json
+
+# # {
+# #     name: "Sanjo"
+# # }
+
+# POST https://scrumbledore-server.herokuapp.com/resource_management HTTP/1.1
+# content-type: application/json
+
+# {
+#     "projectid":"Project1",
+#     "operation":"check-in",
+#     "requestvalue":[
+#         {
+#             "resourceid":"HW1",
+#             "value":4
+#         },
+#         {
+#             "resourceid":"HW2",
+#             "value":10
+#         }
+#     ]
+# }
+
+# POST https://scrumbledore-server.herokuapp.com/resource_management HTTP/1.1
+# content-type: application/json
+
+# {
+#     "projectid":"Project7",
+#     "operation":"check-out",
+#     "requestvalue"[
+#         {"HW1": 50},
+#         {"HW2":0}
+#     ]
+# }
+
+POST https://scrumbledore-server.herokuapp.com/resource_management HTTP/1.1
 content-type: application/json
 
 {
-    name: "Sanjo"
+    "projectid":"Project1",
+    "operation":"check-in",
+    "requestvalue":[
+        {
+            "resourceid":"HW1",
+            "value":4
+        },
+        {
+            "resourceid":"HW2",
+            "value":0
+        }
+    ]
 }
+
+# POST https://scrumbledore-server.herokuapp.com/resource_management HTTP/1.1
+# content-type: application/json
+
+# {
+#     "projectid":"Project7",
+#     "operation":"check-out",
+#     "requestvalue"[
+#         {"HW1": 50},
+#         {"HW2":0}
+#     ]
+# }
+
+# POST http://127.0.0.1:5000/get_specificProject HTTP/1.1
+# content-type: application/json
+
+# {
+#     "projectid":"Project1"
+# }
