@@ -1,115 +1,134 @@
-import React, { useState } from 'react'
+import React, { useState, useEffect } from 'react'
 import { Link } from 'react-router-dom'
 import Dropdown from 'react-bootstrap/Dropdown';
 import DropdownButton from 'react-bootstrap/DropdownButton';
 import { useLocation } from 'react-router-dom';
 import ProgressBar from 'react-bootstrap/ProgressBar';
+import { useHistory } from "react-router-dom";
 
 
 import '../../App.css'
 
 export default function ResourceManagementPage() {
 
-    let checkin = []
-    let checkout = []
-   
-    const [checkedOne, setCheckedOne] = React.useState(false);
-    const [checkedTwo, setCheckedTwo] = React.useState(false);
-
-
-    const handleChangeOne = () => {
-        setCheckedOne(!checkedOne);
-      };
     
-    const handleChangeTwo = () => {
-        setCheckedTwo(!checkedTwo);
-      };
-    
-    
-
-    function WithLabelExample() {
-        const now = 60;
-        return <ProgressBar now={now} label={`${now}%`} />;
-    }
-
-
-    function handleSubmit() {
-        
-        if(checkedOne == true) { 
-            checkin = "check-in" 
-            alert(checkin)
-        }
-        else if (checkedTwo == true) {
-            checkout = "check-out"
-            alert(checkout)
-        }
-    }
-
     let selectedProject = []
     const location = useLocation()
     selectedProject = location.state
-    console.log(selectedProject)
+
+    let contentArray = []
+    contentArray = selectedProject.content
+
+    let requestedUnits = {}
+
+    const[hwSetData, setHWSetData] = useState([{}])
+    const [hwsetRequest, setHwSetRequest] = useState([])
+
+
+    useEffect(() => {
+        fetch("/get_hardwareset").then(
+            res => res.json()
+        ).then(
+            data => {
+                setHWSetData(data)
+            }
+        )
+    }, [] )
+
+
+    const [userSelection, setUserSelection] = React.useState(false);
+    
+    
+    function getHWSetDetails(availability) {
+        const now = availability;
+        return <ProgressBar now={now} label={`${now}%`} />;
+    }
+
+    function getUtilized(resourceid) {
+        return contentArray.res_utilized[resourceid]
+
+    }
+
+    function handleRequest(recourceid, requestedUnit) {
+        const newInput = {
+            "recourceid" : recourceid,
+            "value" : requestedUnit
+        }
+        const updatedInput = [...hwsetRequest, newInput]
+        setHwSetRequest(updatedInput)   
+       }
+
+    
+       function handleSubmit(selectedProject, userSelection) {
+        const requestOptions = {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({"projectid": selectedProject, "operation": userSelection, 
+            "requestvalue" : hwsetRequest})
+
+        };
+
+        console.log(                                                )
+     
+        fetch('/resource_management', requestOptions)
+            .then(data => data.json())
+            .then(json => {
+              console.log(json)
+            })
+        }
+   
+
 
     return (
+
         <div className="text-center m-5-auto">
-        <h2>Project: {selectedProject}</h2>
-        <form action="/selectproject">
-            <div> 
-            HWSet1 {WithLabelExample()}
-                <p>
-                    <label>Request</label><br/>
-                    <input type="text" name="request" required />
-                </p>
-                    <label>Utilized</label><br/>
-                    <input type="text" name="request" required />
-            </div>
-
-            <div> 
-            HWSet2 {WithLabelExample()}
-                <p>
-                    <label>Request</label><br/>
-                    <input type="text" name="request" required />
-                </p>
-                    <label>Utilized</label><br/>
-                    <input type="text" name="request" required />
-            </div>
-
-        <br></br>
-           
-           <div>
-            <label>
-                <input
-                    class = "messageCheckBox"
-                    value = "checkin"
-                    type = "checkbox"
-                    checked = {checkedOne}
-                    onChange = {handleChangeOne}/>
-                    Check-in
-            </label>
-            <label>
-                <input
-                    class = "messageCheckBox"
-                    value="checkout"
-                    type = "checkbox"
-                    checked = {checkedTwo}
-                    onChange = {handleChangeTwo}/>
-                    Check-out
-            </label>
-           
-           </div>
-
+        <h2>Project: {contentArray.projectid}</h2>
+          <div>
+            <form>
+            {hwSetData.map(({ resourceid, capacity, availability }) => (       
+            <div className="text-center m-5-auto"> 
+            <p key={resourceid}> 
+            <div>
+            {resourceid}{getHWSetDetails(availability)}
+            <p> Available: {availability} / {capacity} </p>
             <p>
-                <span><a href="https://google.com" target="_blank" rel="noopener noreferrer">add a user</a></span>
+            <div>
+            <label>Utilized</label><br/>
+            <input type="text" name="request" value={getUtilized(resourceid)} />
+            </div>
             </p>
             <p>
-                <button id="sub_btn" onClick ={handleSubmit} type="submit">Proceed</button>
+            <label>Request</label><br/>
+            <input type="text" name="request"  onChange={(e) => handleRequest(resourceid, e.target.value)} required />
+            {/* <input type="text" name="request" onChange={(e) => setCars(prevState => [...prevState,  e.target.value])} required /> */}
             </p>
-        </form>
+            </div>
+            </p>
+            </div>
+            ))}
+            </form>
+
+            <p>
+            <div onChange={(e) => setUserSelection(e.target.value)}>
+            <input type="radio" value="check-in" name="checkin"  style={{ width: 'auto' }}/> Check-in
+            <br/>
+            <input type="radio" value="check-out" name="checkout"  style={{ width: 'auto' }}/> Check-out
+            </div>
+            <br/>
+            </p> 
+        
+        </div>
+
+        <p>
+            <button onClick = {handleSubmit(contentArray.projectid, userSelection, requestedUnits)}> Submit </button>
+        {/* <button onClick={handleSubmit(contentArray.projectid, userSelection, requestedUnits)} className="primary-button">Proceed</button> */}
+        </p>
         <footer>
             <p><Link to="/">Back to Homepage</Link>.</p>
         </footer>
-    </div>
-        
+        </div>
+    
+   
     )
 
 }
