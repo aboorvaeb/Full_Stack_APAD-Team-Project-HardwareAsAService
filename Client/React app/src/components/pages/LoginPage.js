@@ -1,4 +1,4 @@
-import React, { useEffect, useState, useContext }from 'react'
+import React, { useEffect, useState }from 'react'
 import { Link } from 'react-router-dom'
 import { useHistory } from "react-router-dom";
 import { useNavigate } from "react-router-dom";
@@ -13,7 +13,6 @@ import '../../App.css'
 
 
 export default function SignInPage(props) {
-    const {appvalue, setAppvalue} = useContext(AppContext);
 
     let history = useHistory();
     
@@ -77,13 +76,18 @@ export default function SignInPage(props) {
       });
       let resJson = await res.json();
       if (res.status === 200) {
-        testList =  resJson.projects
-        temp = testList
-        handleState(temp);
+        if(resJson.message === "success"){
+          testList =  resJson.projects
+          temp = testList
+          handleState(temp);
 
-        setAppvalue(resJson.username)
-        console.log({appvalue})
-        window.location.href = "/selectproject"
+          setUserName(username)
+          localStorage.setItem('loggedin_user', JSON.stringify(username));
+          window.location.href = "/selectproject"
+        } else{
+          alert(JSON.stringify(resJson.message))
+        }
+          
       } else {
         alert("Some error occurred");
       }
@@ -92,8 +96,12 @@ export default function SignInPage(props) {
     }
   };
 
+  // useEffect(() => {
+  //   localStorage.setItem('loggedin_user', JSON.stringify(username));
+  // }, [username]);
+
     function handleState(temp) {
-      alert("handleState")
+      // alert("handleState")
       testemp = temp
       console.log(testemp)
       history.push({
