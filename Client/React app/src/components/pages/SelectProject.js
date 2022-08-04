@@ -5,6 +5,11 @@ import DropdownButton from 'react-bootstrap/DropdownButton';
 import { useLocation } from 'react-router-dom';
 import { useHistory } from "react-router-dom";
 
+import Form from 'react-bootstrap/Form';
+import Button from 'react-bootstrap/Button';
+
+import '../../App.css'
+
 
 export default function HomePage(props) {
 
@@ -15,7 +20,7 @@ export default function HomePage(props) {
 
     projects = location.state
     console.log(projects)
-    
+
     function callApi() {
 
         const requestOptions = {
@@ -42,14 +47,11 @@ export default function HomePage(props) {
 
     
     return (
-
-        //hello {this.props.location.state}
-        
-
         <div className="text-center m-5-auto">
             
-            <h2>Select Project</h2>
-            <form action="/selectproject">     
+            <h2>Project</h2>
+            <h5>Select project to proceed</h5>
+            {/* <form action="/selectproject">     
                 <div>
                  <div>Selected Project: {selectedProject}</div>
                  <select onChange={e => setSelectedProject(e.target.value)}>
@@ -59,13 +61,28 @@ export default function HomePage(props) {
                     ))}    
                 </select>
                 </div>
-            </form>
+            </form> */}
+            <Form>
+                <Form.Select className="mb-3" size="lg">
+                    <option value="">Select Project</option>
+                            {projects.map(project => (
+                            <option> {project} </option>
+                        ))}    
+                </Form.Select>
+                <br />
+            <Button variant="secondary" onClick={callApi}>
+            Proceed
+              </Button>
+              <footer>
+                <p><Link to="/newproject">Create a new project</Link>.</p>
+            </footer>
+            </Form>
             
-            <button onClick={callApi} className="primary-button">Proceed</button>
+            {/* <button onClick={callApi} className="primary-button">Proceed</button>
                 
             <footer>
                 <p><Link to="/newproject">Create a new project</Link>.</p>
-            </footer>
+            </footer> */}
 
         </div>
     )

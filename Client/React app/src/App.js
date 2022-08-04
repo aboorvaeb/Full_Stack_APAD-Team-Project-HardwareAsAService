@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useState, useMemo } from 'react'
 import { BrowserRouter as Router, Switch, Route } from 'react-router-dom'
 
 import LandingPage from './components/pages/LandingPage'
@@ -11,13 +11,19 @@ import NewProjectPage from './components/pages/NewProject'
 
 import NavBar from './components/pages/Navbar'
 
+import { AppContext } from './AppContext'
+
 
 import './App.css'
 import ResourceManagementPage from './components/pages/ResourceManagementPage'
 
 export default function App() {
+    const [appvalue, setAppvalue] = useState(null)
+
+    const providerValue = useMemo(() => ({appvalue, setAppvalue}), [appvalue, setAppvalue])
     return (
         <Router>
+            <AppContext.Provider value={providerValue}>
             <NavBar />
             <div>
                 <Switch>
@@ -31,6 +37,7 @@ export default function App() {
                 </Switch>
                 {/* <Footer /> */}
             </div>
+            </AppContext.Provider>
         </Router>
     )
 }
