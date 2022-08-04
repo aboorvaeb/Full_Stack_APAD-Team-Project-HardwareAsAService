@@ -35,7 +35,7 @@ export default function HomePage(props) {
             <form action="/resourcemanagement">
                 
                 <div>
-                 <div>Selected Project: {selectedProject}</div>
+                 <div>Selected Project: {selectedProject}</div><br></br>
                  <select onChange={e => setSelectedProject(e.target.value)}>
                 <option value="">Select Project</option>
                         {projects.map(project => (

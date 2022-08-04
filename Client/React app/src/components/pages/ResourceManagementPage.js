@@ -92,8 +92,7 @@ export default function ResourceManagementPage() {
                     value="checkout"
                     type = "checkbox"
                     checked = {checkedTwo}
-                    onChange = {handleChangeTwo}/>
-                    Check-out
+                    onChange = {handleChangeTwo}/>Check-out    
             </label>
            
            </div>

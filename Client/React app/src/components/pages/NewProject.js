@@ -32,7 +32,7 @@ export default function SignUpPage() {
             </form>
                 </p>
                 <p>
-                    <span><a href="https://google.com" target="_blank" rel="noopener noreferrer">add a user</a></span>
+                    <span><a href="https://google.com" target="_blank" rel="noopener noreferrer">Add a user</a></span>
                 </p>
                 <p>
                     <button id="sub_btn" type="submit">Proceed</button>
