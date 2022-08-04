@@ -10,7 +10,6 @@ import { useHistory } from "react-router-dom";
 import '../../App.css'
 
 export default function ResourceManagementPage() {
-
     
     let selectedProject = []
     const location = useLocation()
@@ -23,7 +22,6 @@ export default function ResourceManagementPage() {
 
     const[hwSetData, setHWSetData] = useState([{}])
     const [hwsetRequest, setHwSetRequest] = useState([])
-
 
     useEffect(() => {
         fetch("/get_hardwareset").then(
@@ -49,17 +47,27 @@ export default function ResourceManagementPage() {
 
     }
 
-    function handleRequest(recourceid, requestedUnit) {
+    function handleRequest(resourceid, requestedUnit) {
         const newInput = {
-            "recourceid" : recourceid,
-            "value" : requestedUnit
+            "resourceid" : resourceid,
+            "value" : parseInt(requestedUnit)
         }
         const updatedInput = [...hwsetRequest, newInput]
         setHwSetRequest(updatedInput)   
        }
 
     
-       function handleSubmit(selectedProject, userSelection) {
+    function handleSubmit(selectedProject, userSelection) {
+
+        for(let i=0; i<hwsetRequest.length; i++) {
+            let childObj = hwsetRequest[i]
+            if(childObj.value > getUtilized(childObj.resourceid))
+            alert("retry") 
+            
+
+        }
+
+        console.log("check")
         const requestOptions = {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
@@ -68,16 +76,17 @@ export default function ResourceManagementPage() {
 
         };
 
-        console.log(                                                )
+        console.log(JSON.stringify({"projectid": selectedProject, "operation": userSelection, 
+        "requestvalue" : hwsetRequest})                                         )
      
         fetch('/resource_management', requestOptions)
             .then(data => data.json())
             .then(json => {
-              console.log(json)
-            })
-        }
-   
 
+              alert(json)
+            })
+    }
+   
 
     return (
 
@@ -103,7 +112,7 @@ export default function ResourceManagementPage() {
             {/* <input type="text" name="request" onChange={(e) => setCars(prevState => [...prevState,  e.target.value])} required /> */}
             </p>
             </div>
-            </p>
+            </p> 
             </div>
             ))}
             </form>
@@ -115,12 +124,14 @@ export default function ResourceManagementPage() {
             <input type="radio" value="check-out" name="checkout"  style={{ width: 'auto' }}/> Check-out
             </div>
             <br/>
-            </p> 
+            <button onClick = { () => handleSubmit(contentArray.projectid, userSelection)}> Submit </button>
+            {/* mistake: () => or else binded upon refresh/loading */}
+            </p>  
         
         </div>
 
         <p>
-            <button onClick = {handleSubmit(contentArray.projectid, userSelection, requestedUnits)}> Submit </button>
+            
         {/* <button onClick={handleSubmit(contentArray.projectid, userSelection, requestedUnits)} className="primary-button">Proceed</button> */}
         </p>
         <footer>
