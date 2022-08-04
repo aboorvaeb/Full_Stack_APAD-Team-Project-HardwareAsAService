@@ -66,14 +66,14 @@ export default function SignInPage(props) {
       
     
     return (
-        <div className="App">
+        <div className="text-center m-5-auto">
             <form onClick="return formResponse();">
                 <p>
-                <label> Input </label>
+                <label>Enter User Name</label>
                 <br></br>
                 <input type="text" id="username" value={username}  onChange={(e) => setUserName(e.target.value)}/>
                 </p>
-                <label> Password </label>
+                <label>Enter Password </label>
                 <br></br>
                 <input type="password" id="pwd" value={pwd} onChange={(e) => setPwd(e.target.value)} />
             </form>
