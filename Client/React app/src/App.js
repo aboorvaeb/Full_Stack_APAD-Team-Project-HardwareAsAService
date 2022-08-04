@@ -7,10 +7,11 @@ import RegisterPage from './components/pages/RegisterPage'
 import ForgetPasswordPage from './components/pages/ForgetPasswordPage'
 import SelectProject from './components/pages/SelectProject'
 import NewProjectPage from './components/pages/NewProject'
-import ResourceManagementPage from './components/pages/ResourceManagementPage'
+//import ResourceManagementPage from './components/pages/ResourceManagementPage'
 
 
 import './App.css'
+import ResourceManagementPage from './components/pages/ResourceManagementPage'
 
 export default function App() {
     return (
