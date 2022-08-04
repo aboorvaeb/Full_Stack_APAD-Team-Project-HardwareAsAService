@@ -9,6 +9,8 @@ import SelectProject from './components/pages/SelectProject'
 import NewProjectPage from './components/pages/NewProject'
 //import ResourceManagementPage from './components/pages/ResourceManagementPage'
 
+import NavBar from './components/pages/Navbar'
+
 
 import './App.css'
 import ResourceManagementPage from './components/pages/ResourceManagementPage'
@@ -16,6 +18,7 @@ import ResourceManagementPage from './components/pages/ResourceManagementPage'
 export default function App() {
     return (
         <Router>
+            <NavBar />
             <div>
                 <Switch>
                     <Route exact path="/" component={ LandingPage } />
@@ -32,20 +35,20 @@ export default function App() {
     )
 }
 
-const Footer = () => {
-    return (
-        <p className="text-center" style={ FooterStyle }>Designed & coded by Scrumbledore's Army</p>
-    )
-}
+// const Footer = () => {
+//     return (
+//         <p className="text-center" style={ FooterStyle }>Designed & coded by Scrumbledore's Army</p>
+//     )
+// }
 
-const FooterStyle = {
-    background: "#222",
-    fontSize: ".8rem",
-    color: "#fff",
-    position: "absolute",
-    bottom: 0,
-    padding: "1rem",
-    margin: 0,
-    width: "100%",
-    opacity: ".5"
-}
+// const FooterStyle = {
+//     background: "#222",
+//     fontSize: ".8rem",
+//     color: "#fff",
+//     position: "absolute",
+//     bottom: 0,
+//     padding: "1rem",
+//     margin: 0,
+//     width: "100%",
+//     opacity: ".5"
+// }
