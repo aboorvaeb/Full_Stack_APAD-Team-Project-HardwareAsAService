@@ -13,6 +13,21 @@ import '../../App.css'
 
 export default function HomePage(props) {
 
+    const [projectsList, setProjectsList] = useState([{}]);
+    let projList = []
+
+    useEffect(() => {
+        fetch("/get_allprojects").then(
+            res => res.json()
+        ).then(
+            data => {
+                console.log(data)
+                setProjectsList(data)
+                projList = data
+                alert(JSON.stringify(projList))
+            }
+        )
+    }, [] )
     let history = useHistory();
     const [selectedProject, setSelectedProject] = useState('');
     let projects = []
@@ -63,7 +78,7 @@ export default function HomePage(props) {
                 </div>
             </form> */}
             <Form>
-                <Form.Select className="mb-3" size="lg">
+                <Form.Select className="mb-3" size="lg" onChange={e => setSelectedProject(e.target.value)}>
                     <option value="">Select Project</option>
                             {projects.map(project => (
                             <option> {project} </option>
@@ -75,6 +90,7 @@ export default function HomePage(props) {
               </Button>
               <footer>
                 <p><Link to="/newproject">Create a new project</Link>.</p>
+                <p><Link to="/joinproject">Join an exisiting project</Link>.</p>
             </footer>
             </Form>
             
