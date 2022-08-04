@@ -65,6 +65,7 @@ export default function HomePage(props) {
                 
             <footer>
                 <p><Link to="/newproject">Create a new project</Link>.</p>
+                <p><Link to="/joinproject">Join an exisiting project</Link>.</p>
             </footer>
 
         </div>

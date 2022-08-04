@@ -15,13 +15,18 @@ export default function ResourceManagementPage() {
     const location = useLocation()
     selectedProject = location.state
 
-    let contentArray = []
-    contentArray = selectedProject.content
+    let contentArrayInitial = []
+    contentArrayInitial = selectedProject.content
+    let project_id = contentArrayInitial.projectid
+    let contentArrayLatest = []
+    contentArrayLatest = fetchProjectDetails(project_id)
+
 
     let requestedUnits = {}
 
     const[hwSetData, setHWSetData] = useState([{}])
     const [hwsetRequest, setHwSetRequest] = useState([])
+    const [response, setResponse] = useState()
 
     useEffect(() => {
         fetch("/get_hardwareset").then(
@@ -33,7 +38,7 @@ export default function ResourceManagementPage() {
         )
     }, [] )
 
-
+    
     const [userSelection, setUserSelection] = React.useState(false);
     
     
@@ -43,8 +48,8 @@ export default function ResourceManagementPage() {
     }
 
     function getUtilized(resourceid) {
-        return contentArray.res_utilized[resourceid]
-
+        console.log(contentArrayLatest)
+        return ""
     }
 
     function handleRequest(resourceid, requestedUnit) {
@@ -59,14 +64,6 @@ export default function ResourceManagementPage() {
     
     function handleSubmit(selectedProject, userSelection) {
 
-        for(let i=0; i<hwsetRequest.length; i++) {
-            let childObj = hwsetRequest[i]
-            if(childObj.value > getUtilized(childObj.resourceid))
-            alert("retry") 
-            
-
-        }
-
         console.log("check")
         const requestOptions = {
             method: 'POST',
@@ -75,23 +72,52 @@ export default function ResourceManagementPage() {
             "requestvalue" : hwsetRequest})
 
         };
-
         console.log(JSON.stringify({"projectid": selectedProject, "operation": userSelection, 
         "requestvalue" : hwsetRequest})                                         )
      
         fetch('/resource_management', requestOptions)
             .then(data => data.json())
             .then(json => {
-
-              alert(json)
+                console.log(json)
+                alert(json)
+                handlePostRequest(json)
             })
+        
+       
+    }
+
+    function handlePostRequest(jsonResponse) {
+        if(jsonResponse.message == "Successfully updated") {
+            alert("Successfully updated")
+            window.location.reload()
+        }
+        else {
+            alert("Re try")
+            window.location.reload()
+
+        } 
+    }
+
+    function fetchProjectDetails(project_id) {
+        const requestOptions = {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({"projectid": project_id})
+            
+        };
+        fetch('/get_project', requestOptions)
+        .then(data => data.json())
+        .then(json => {
+            contentArrayLatest = json
+    })
+
     }
    
 
     return (
 
         <div className="text-center m-5-auto">
-        <h2>Project: {contentArray.projectid}</h2>
+        <h2>Project: {project_id}</h2>
           <div>
             <form>
             {hwSetData.map(({ resourceid, capacity, availability }) => (       
@@ -124,7 +150,7 @@ export default function ResourceManagementPage() {
             <input type="radio" value="check-out" name="checkout"  style={{ width: 'auto' }}/> Check-out
             </div>
             <br/>
-            <button onClick = { () => handleSubmit(contentArray.projectid, userSelection)}> Submit </button>
+            <button onClick = { () => handleSubmit(project_id, userSelection)}> Submit </button>
             {/* mistake: () => or else binded upon refresh/loading */}
             </p>  
         
