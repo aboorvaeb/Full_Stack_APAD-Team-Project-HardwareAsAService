@@ -15,7 +15,7 @@ export default function HomePage(props) {
 
     projects = location.state
     console.log(projects)
-
+    
     function callApi() {
 
         const requestOptions = {

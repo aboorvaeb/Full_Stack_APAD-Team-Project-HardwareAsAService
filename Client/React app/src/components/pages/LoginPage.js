@@ -36,9 +36,14 @@ export default function SignInPage(props) {
               testList =  json.projects
               temp = testList
             
-              handleState(temp);
-              if(json.message === "success")  {window.location.href = "/selectproject"}
-              else alert(JSON.stringify(json))
+              if(json.message === "success")  {
+                handleState(temp);
+                window.location.href = "/selectproject"
+              }
+              else {
+                alert(JSON.stringify("Username not registered. New user?")) 
+                window.location.reload()
+              } 
             
 
             })
