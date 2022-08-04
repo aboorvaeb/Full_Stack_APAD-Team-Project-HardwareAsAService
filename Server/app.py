@@ -95,6 +95,25 @@ def add_project():
 #     # response = {"username":json_docs}
 #     return json.dumps(json_docs)
 
+# Get list of all users
+@app.route("/get_allprojects", methods=['GET'])
+@cross_origin()
+def get_allprojects():
+    __project = db.Project.find({})
+    json_docs = []
+    for document in __project:
+        document.pop('projectdesc', None)
+        document.pop('users', None)
+        document.pop('res_utilized', None)
+        document.pop('_id', None)
+        # json_doc = json.dumps(document, default=json_util.default)
+        # print(document)
+        json_docs.append(document['projectid'])
+    # json_docs = json.dumps(json_docs, default=json_util.default)
+    # print(json_docs)
+    response = {"projects":json_docs}
+    return json.dumps(response)
+
 # # Get project details. Checks projectid passed
 # @app.route("/get_project", methods=['POST'])
 # @cross_origin()

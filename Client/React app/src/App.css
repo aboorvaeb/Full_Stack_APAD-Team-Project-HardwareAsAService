@@ -141,3 +141,9 @@ form span {
 .home-page-title {
     color: #222
 }
+
+input::placeholder {  
+                  
+    /* Firefox, Chrome, Opera */ 
+    text-align: center; 
+} 

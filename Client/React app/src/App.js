@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useState } from 'react'
 import { BrowserRouter as Router, Switch, Route } from 'react-router-dom'
 
 import LandingPage from './components/pages/LandingPage'
@@ -11,6 +11,8 @@ import NewProjectPage from './components/pages/NewProject'
 import JoinProjectPage from './components/pages/JoinProjectPage'
 
 import NavBar from './components/pages/Navbar'
+
+// import { AppContext } from './AppContext'
 
 
 import './App.css'
