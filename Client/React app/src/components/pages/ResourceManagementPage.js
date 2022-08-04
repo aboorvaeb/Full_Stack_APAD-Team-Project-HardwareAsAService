@@ -48,8 +48,8 @@ export default function ResourceManagementPage() {
     }
 
     function getUtilized(resourceid) {
-        console.log(contentArrayLatest)
-        return ""
+        
+        return contentArrayInitial.res_utilized[resourceid]
     }
 
     function handleRequest(resourceid, requestedUnit) {
