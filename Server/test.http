@@ -116,15 +116,15 @@ content-type: application/json
 
 {
     "projectid":"Project1",
-    "operation":"check-in",
+    "operation":"check-out",
     "requestvalue":[
         {
             "resourceid":"HW1",
-            "value":4
+            "value":0
         },
         {
             "resourceid":"HW2",
-            "value":0
+            "value":300
         }
     ]
 }

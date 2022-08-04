@@ -229,28 +229,49 @@ def resource_management():
     __req_body = flask.request.get_json()
     __project = db.Project.find_one({"projectid":__req_body["projectid"]})
     if __project is not None:
+        HWSET_update = []
+        Project_update = []
         for HWSet in __req_body["requestvalue"]:
             # Update availability in HardwareSets collection
             __hardwareSet = db.HardwareSet.find_one({"resourceid":HWSet["resourceid"]})
             if(__req_body["operation"]=="check-in"):
                 __availability = __hardwareSet["availability"] + HWSet["value"]
             else:
+                if (HWSet["value"] > __hardwareSet["availability"]):
+                    return flask.jsonify(message="Failed: Check-out value is greater than the resource available", success=False)
                 __availability = __hardwareSet["availability"] - HWSet["value"]
-            db.HardwareSet.find_one_and_update({"_id": __hardwareSet["_id"]}, 
-                            {"$set": {"resourceid": __hardwareSet["resourceid"],"capacity": __hardwareSet["capacity"], "availability":__availability}})
+
+            HWSET_update.append({"_id":__hardwareSet["_id"], "set":{"resourceid": __hardwareSet["resourceid"],"capacity": __hardwareSet["capacity"], "availability":__availability}})
 
             # Update utilized in Projects collection
             __res_utilized = __project["res_utilized"]
             if __hardwareSet["resourceid"] not in __res_utilized.keys():
                 __res_utilized.update({__hardwareSet["resourceid"]:0})
             if(__req_body["operation"]=="check-in"):
+                if (HWSet["value"] > __res_utilized[__hardwareSet["resourceid"]]):
+                    return flask.jsonify(message="Failed: Check-in value is greater than the resource utilized", success=False)
                 __updatedUtilized = __res_utilized[__hardwareSet["resourceid"]] - HWSet["value"]
             else:
                 __updatedUtilized = __res_utilized[__hardwareSet["resourceid"]] + HWSet["value"]
             __res_utilized.update({__hardwareSet["resourceid"]:__updatedUtilized})
 
-            db.Project.find_one_and_update({"_id": __project["_id"]}, 
-                            {"$set": {"projectid":__project["projectid"], "projectdesc":__project["projectdesc"],"users":__project["users"],"res_utilized":__res_utilized}})
+            Project_update.append({"_id": __project["_id"], "set":{"projectid":__project["projectid"], "projectdesc":__project["projectdesc"],"users":__project["users"],"res_utilized":__res_utilized}})
+
+            # Update both Hardware and Projects collection
+            # db.HardwareSet.find_one_and_update({"_id": __hardwareSet["_id"]}, 
+            #                 {"$set": {"resourceid": __hardwareSet["resourceid"],"capacity": __hardwareSet["capacity"], "availability":__availability}})
+
+            # db.Project.find_one_and_update({"_id": __project["_id"]}, 
+            #                 {"$set": {"projectid":__project["projectid"], "projectdesc":__project["projectdesc"],"users":__project["users"],"res_utilized":__res_utilized}})
+
+        # Update both Hardware and Projects collection
+        for docs in HWSET_update:
+            db.HardwareSet.find_one_and_update({"_id": docs["_id"]}, 
+                {"$set": docs["set"]})
+        for docs in Project_update: 
+            db.Project.find_one_and_update({"_id": docs["_id"]}, 
+                {"$set": docs["set"]})
+
 
         return flask.jsonify(message="Successfully updated", success=True)
     else:
