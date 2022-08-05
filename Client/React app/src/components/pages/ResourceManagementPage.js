@@ -6,6 +6,7 @@ import { useLocation } from 'react-router-dom';
 import ProgressBar from 'react-bootstrap/ProgressBar';
 import { useHistory } from "react-router-dom";
 
+
 import Form from 'react-bootstrap/Form';
 import Button from 'react-bootstrap/Button';
 
@@ -14,6 +15,7 @@ import '../../App.css'
 
 export default function ResourceManagementPage() {
     
+   
     let selectedProject = []
     const location = useLocation()
     selectedProject = location.state
@@ -21,85 +23,85 @@ export default function ResourceManagementPage() {
     let contentArrayInitial = []
     contentArrayInitial = selectedProject.content
     let project_id = contentArrayInitial.projectid
-    let contentArrayLatest = []
-
-    const [response, setResponse] = useState();
-    const [responseTest, setResponseTest] = useState();
-
     
-    const requestOptions = {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({"projectid": project_id})
-        
-    };
+    const [hwSetData1_dup, setHWSetData1_dup] = useState()
+    const [hwSetData2_dup, setHWSetData2_dup] = useState()
 
-    // get_project call
-    fetch('/get_project?'.concat(project_id), requestOptions)
-    .then(data => data.json())
-    .then(json => {
-        setResponse(JSON.stringify(json))
-        console.log(response)
-        localStorage.setItem('getProjectResponse', response);
-    })
- 
-    let requestedUnits = {}
+    const [hwSetData1Cap_dup, setHWSetData1Cap] = useState()
+    const [hwSetData2Cap_dup, setHWSetData2Cap] = useState()
+    const [hwSetData, setHWSetData] = useState()
+   
+    let hwSetData1 = []
+    let hwSetData2 = []
+    let hwSetDataAvailabilty_1 = []
+    let hwSetDataAvailabilty_2 = []
 
-    const[hwSetData, setHWSetData] = useState([{}])
+    let hwSetDataCapacity_1 = []
+    let hwSetDataCapacity_2 = []
+
+    let contentArrayHW1 = []
+    let contentArrayHW2 = []
+
+    const [HWSet1Util, setHWSet1Util] = useState()
+    const [HWSet2Util, setHWSet2Util] = useState()
+
     const [hwsetRequest, setHwSetRequest] = useState([])
-    
+
+
+
+    let test_dup = []
+
+
     useEffect(() => {
         fetch("/get_hardwareset").then(
             res => res.json()
         ).then(
             data => {
+                console.log(project_id)
                 setHWSetData(data)
+                hwSetData1 = data[0]
+                hwSetData2 = data[1]
+                hwSetDataAvailabilty_1 = hwSetData1.availability
+                hwSetDataAvailabilty_2 = hwSetData2.availability
+                hwSetDataCapacity_1 = hwSetData1.capacity
+                hwSetDataCapacity_2 = hwSetData2.capacity
+                setHWSetData1_dup(hwSetDataAvailabilty_1)
+                console.log(hwSetData1_dup)
+                setHWSetData2_dup(hwSetDataAvailabilty_2)
+                console.log(hwSetData2_dup)
+                setHWSetData1Cap(hwSetDataCapacity_1)
+                setHWSetData2Cap(hwSetDataCapacity_2)
             }
         )
     }, [] )
 
-    
-    const [userSelection, setUserSelection] = React.useState(false);
-    
+    const requestOptions = {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({"projectid": project_id})   
+    };
+
+    fetch('/get_project', requestOptions)
+    .then(data => data.json())
+    .then(json => {
+        console.log(json)
+        contentArrayHW1 = json.content.res_utilized["HW1"]
+        contentArrayHW2 = json.content.res_utilized["HW2"]
+        setHWSet1Util(contentArrayHW1)
+        setHWSet2Util(contentArrayHW2)
+    } )
+
     function getHWSetDetails(availability) {
         const now = availability;
-        return <ProgressBar now={now} label={`${now}%`} />;
+        return <ProgressBar variant="secondary" now={now} label={`${now}%`} />;
     }
 
-    function getUtilized(resourceid) {
 
-        const requestOptions = {
-            method: 'POST',
-            headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({"projectid": project_id})
-            
-        };
-        // get_project call
-        fetch('/get_project', requestOptions)
-        .then(data => data.json())
-        .then(json => {
-            setResponseTest(JSON.stringify(json))
-            console.log(responseTest)
-            //localStorage.setItem('getProjectResponse', response);
-        })
-
-        try {
-            return responseTest.content.res_utilized[resourceid]
-        } catch(exception) {
-            return contentArrayInitial.res_utilized[resourceid]
-        }
+    function getAvailability(availability, capacity) {
+       return <p>Available: {availability} / {capacity} </p>
     }
-    
 
-    // console.log(response) 
-    // if(response) {
-    //     console.log(response)
-    //     return ""//response.content.res_utilized[resourceid]
-    // } else {
-    //     return  ""
-    // }
-    
-
+   
     function handleRequest(resourceid, requestedUnit) {
         const newInput = {
             "resourceid" : resourceid,
@@ -107,12 +109,10 @@ export default function ResourceManagementPage() {
         }
         const updatedInput = [...hwsetRequest, newInput]
         setHwSetRequest(updatedInput)   
-       }
+     }
 
-    
-    function handleSubmit(selectedProject, userSelection) {
-        alert(userSelection)
-        console.log("check")
+    function handleSubmitHardwareSet1(selectedProject, userSelection) {
+        //alert(userSelection)
         const requestOptions = {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
@@ -120,108 +120,100 @@ export default function ResourceManagementPage() {
             "requestvalue" : hwsetRequest})
 
         };
-        console.log(JSON.stringify({"projectid": selectedProject, "operation": userSelection, 
-        "requestvalue" : hwsetRequest})                                         )
-     
+        //console.log(requestOptions)
+        // console.log(JSON.stringify({"projectid": selectedProject, "operation": userSelection, 
+        // "requestvalue" : hwsetRequest}))
+
         fetch('/resource_management', requestOptions)
             .then(data => data.json())
             .then(json => {
-                console.log(json)
-                //alert(json)
-                handlePostRequest(json)
+                alert("Hi")
+                if(json.message === "Successfully updated") {
+                    alert(json.message)
+                } else{
+                    alert(json.message)
+                }
+                alert("End")    
+                window.location.reload()
             })
-        
-       
     }
 
-    function handlePostRequest(jsonResponse) {
-        if(jsonResponse.message == "Successfully updated") {
-            alert(jsonResponse.message)
-           // document.getElementById("util").value  = response.content.res_utilized["HW1"]
-            window.location.reload()
-            
-            // update utilized
-        }
-        else {
-            alert(jsonResponse.message)
-            window.location.reload()
-
-        } 
-    }
-
-    function fetchProjectDetails(project_id) {
+    function handleSubmitHardwareSet2(selectedProject, userSelection) {
+        alert(userSelection)
         const requestOptions = {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({"projectid": project_id})
-            
-        };
-        fetch('/get_project', requestOptions)
-        .then(data => data.json())
-        .then(json => {
-            setResponse(JSON.stringify(json))
-            contentArrayLatest = JSON.stringify(json)
-            console.log(contentArrayLatest)
-    })
+            body: JSON.stringify({"projectid": selectedProject, "operation": userSelection, 
+            "requestvalue" : hwsetRequest})
 
+        };
+        console.log(requestOptions)
+        console.log(JSON.stringify({"projectid": selectedProject, "operation": userSelection, 
+        "requestvalue" : hwsetRequest}))
+
+        fetch('/resource_management', requestOptions)
+            .then(data => data.json())
+            .then(json => {
+                alert("Hi")
+                if(json.message === "Successfully updated") {
+                    alert(json.message)
+                }
+                alert("End")    
+                window.location.reload()
+            })
     }
-   
+
 
     return (
-
         <div className="text-center m-5-auto">
-        <h2>Project: {project_id}</h2>
-          <div>
-          <Form>
-            {hwSetData.map(({ resourceid, capacity, availability }) => (       
-            <div className="text-center m-5-auto"> 
-            <p key={resourceid}> 
+          <h2> Resource Management</h2>
+ 
             <div>
-            {resourceid}{getHWSetDetails(availability)}
-            <p> Available: {availability} / {capacity} </p>
-            <p>
-            <div>
-            <label>Utilized</label><br/>
-            <input type="text" id = "util" name="request" value={getUtilized(resourceid)} />
-            </div>
-            </p>
-            <p>
-            <label>Request</label><br/>
-            <input type="text" name="request"  onChange={(e) => handleRequest(resourceid, e.target.value)} required />
-            {/* <input type="text" name="request" onChange={(e) => setCars(prevState => [...prevState,  e.target.value])} required /> */}
-            </p>
-            </div>
-            </p> 
-            </div>
-            ))}
-            </Form>
-
-            <p>
-            {/* <div onChange={(e) => setUserSelection(e.target.value)}>
-            <input type="radio" value="check-in" name="checkin"  style={{ width: 'auto' }}/> Check-in
-            <br/>
-            <input type="radio" value="check-out" name="checkout"  style={{ width: 'auto' }}/> Check-out
-            </div> */}
-            <br/>
-            <Button  value="check-in" onClick = { (e) => handleSubmit(project_id, e.target.value)}> Check-in  </Button>
+        <Form>
+        <Form.Group className="mb-3" controlId="HWSet1">
+        <p> HWSet 1 </p>
+        {getHWSetDetails(hwSetData1_dup)}
+        <p> {getAvailability(hwSetData1_dup, hwSetData1Cap_dup)} </p>
+        <Form.Label> Utilized </Form.Label>
+        <input type="text" value= {HWSet1Util} />
+        <Form.Label> Request </Form.Label>
+        <input type = "text" onChange={(e) => handleRequest("HW1", e.target.value)} />
+        <br/>
+        <br/>
+        </Form.Group>
+        <Button  variant="secondary" value="check-in" onClick = { (e) => handleSubmitHardwareSet1(project_id, e.target.value)}> Check-in  </Button>
             <span></span> <span></span>
-            <Button value="check-out" onClick = { (e) => handleSubmit(project_id, e.target.value)}> Check-out  </Button>
-
-            {/* mistake: () => or else binded upon refresh/loading */}
-            </p>  
+        <Button variant="secondary" value="check-out" onClick = { (e) => handleSubmitHardwareSet1(project_id, e.target.value)}> Check-out  </Button>
         
+
+        </Form>
         </div>
 
-        <p>
-            
-        {/* <button onClick={handleSubmit(contentArray.projectid, userSelection, requestedUnits)} className="primary-button">Proceed</button> */}
-        </p>
-        <footer>
-            <p><Link to="/">Back to Homepage</Link>.</p>
-        </footer>
-        </div>
-    
-   
+       <Form>
+       <Form.Group className="mb-3" controlId="HWSet1">
+       <p> HWSet 2 </p>
+        <p>{hwSetDataAvailabilty_2}</p>
+        {getHWSetDetails(hwSetData2_dup)}
+        <p> {getAvailability(hwSetData2_dup, hwSetData2Cap_dup)} </p>
+        <Form.Label> Utilized </Form.Label>
+        <input type="text" value= {HWSet2Util} />
+        <Form.Label>Request </Form.Label>
+        <input type = "text" onChange={(e) => handleRequest("HW2", e.target.value)} />
+        <br/>
+        <br/>
+        </Form.Group>
+        <Button variant="secondary"  value="check-in" onClick = { (e) => handleSubmitHardwareSet2(project_id, e.target.value)}> Check-in  </Button>
+            <span></span> <span></span>
+        <Button variant="secondary" value="check-out" onClick = { (e) => handleSubmitHardwareSet2(project_id, e.target.value)}> Check-out  </Button>
+      
+      
+       </Form>
+      
+       <br/>
+       
+          </div>
+        
     )
 
+   
 }

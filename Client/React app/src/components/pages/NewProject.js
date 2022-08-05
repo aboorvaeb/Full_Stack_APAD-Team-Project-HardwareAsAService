@@ -1,165 +1,3 @@
-// import React from 'react'
-// import { Link } from 'react-router-dom'
-// import Dropdown from 'react-bootstrap/Dropdown';
-// import DropdownButton from 'react-bootstrap/DropdownButton';
-
-// import '../../App.css'
-
-// export default function SignUpPage() {
-    
-
-//     return (
-//         <div className="text-center m-5-auto">
-//             <h2>Add a project</h2>
-//             <form action="/selectproject">
-//                 <p>
-//                     <label>Set Project ID</label><br/>
-//                     <input type="text" name="project ID" required />
-//                 </p>
-//                 <p>
-//                     <label>Set Project Description</label><br/>
-//                     <input type="text" name="project description" required />
-//                 </p>
-//                 <p>
-//                     <form action="/selectuser">
-//                 <p>
-//                     <label>Add User</label><br/>
-//                     <DropdownButton id="dropdown-basic-button" title="User id">
-//                     <Dropdown.Item href="#/action-1">User 1</Dropdown.Item>
-//                     <Dropdown.Item href="#/action-2">User 2</Dropdown.Item>
-//                     <Dropdown.Item href="#/action-3">User 3</Dropdown.Item>
-//                     </DropdownButton>
-//                 </p>
-//             </form>
-//                 </p>
-//                 <p>
-//                     <span><a href="https://google.com" target="_blank" rel="noopener noreferrer">add a user</a></span>
-//                 </p>
-//                 <p>
-//                     <button id="sub_btn" type="submit">Proceed</button>
-//                 </p>
-//             </form>
-//             <footer>
-//                 <p><Link to="/">Back to Homepage</Link>.</p>
-//             </footer>
-//         </div>
-//     )
-
-// }
-
-//*********************** CODING STARTED ***********************//
-
-// import React, { useState,useEffect } from 'react'
-// import { Link } from 'react-router-dom'
-// import Dropdown from 'react-bootstrap/Dropdown';
-// import DropdownButton from 'react-bootstrap/DropdownButton';
-
-// import '../../App.css'
-
-// export default function SignUpPage({ userInput, onFormChange }) {
-
-//     const [projectid, setProjectid] = useState('');
-//     const [projectdesc, setProjectdesc] = useState('');
-//     const [selectedusers, setSelectedUsers] = useState('');
-//     const [allusers, setAllUsers] = useState('');
-//     const[data, setData] = useState([{}])
-//     let users = []
-
-//     useEffect(() => {
-//         fetch("/get_users").then(
-//             res => res.json()
-//         ).then(
-//             data => {
-//                 setAllUsers(data)
-//             }
-//         )
-//         }, [] )
-
-//     let allusersarray = []
-//     allusersarray = allusers["username"]
-//     //allusersarray = ['sd','sds','sdsd']
-//     if(typeof allusersarray !== 'undefined'){
-//         console.log(allusersarray[0])
-//         let optionItems = allusersarray.map((allusersarray, index) => 
-//         <option key={index}> {allusersarray} </option>);
-//     }
-    
-
-//     // let optionItems = allusersarray.map((allusersarray, index) => 
-//     // <option key={index}> {allusersarray} </option>
-//     // );   
-    
-
-//     function callApi() {
-//         // Simple POST request with a JSON body using fetch
-//         //console.log({allusersarray})
-
-//         const requestOptions = {
-//             method: 'POST',
-//             headers: { 'Content-Type': 'application/json' },
-//             body: JSON.stringify({"projectid": projectid,"projectdesc": projectdesc,"users": [selectedusers]})
-//         };
-//         fetch('/add_project', requestOptions)
-//             .then(data => data.json())
-//             .then(json => {
-//               //alert(JSON.stringify(json)))
-//               if(json.success === "false")  {window.location.href = "/get_hardwareset"}
-//               else alert(JSON.stringify(allusers["username"]))
-//             })
-
-//         setProjectid("")
-//         setProjectdesc("")
-            
-//       }
-    
-
-//     return (
-//         <div className="text-center m-5-auto">
-//             <h2>Add a project</h2>
-//             <form action="/selectproject">
-//                 <p>
-//                     <label>Set Project ID</label><br/>
-//                     <input type="text" name="projectid"  id="projectid" value={projectid} onChange={(e) => setProjectid(e.target.value)} required/>
-//                 </p>
-//                 <p>
-//                     <label>Set Project Description</label><br/>
-//                     <input type="text" name="projectdesc"  id="projectdesc" value={projectdesc} onChange={(e) => setProjectdesc(e.target.value)} required/>
-//                 </p>
-//                 <p>
-//                 <form action="/selectuser">          
-//                 <div>
-//                     <div>Add User {selectedusers} </div>
-//                     {/* <select onChange={e => setSelectedUsers(e.target.value)}>
-//                     <option value="">Select Users</option>
-//                         {optionItems}    
-//                     </select> */}
-//                     {/* <select onChange={e => setSelectedUsers(e.target.value)}>
-//                     <option value="">Select Users</option>
-//                         {allusersarray.map((user) => 
-//                         <option key={user}> {user} </option>
-//                     )}    
-//                     </select> */}
-//                 </div>
-//                 </form>
-//                 </p>
-//                 <p>
-//                     <span><a href="https://google.com" target="_blank" rel="noopener noreferrer">add a user</a></span>
-//                 </p>
-//                 <p>
-//                     <button id="sub_btn" type="submit" onClick={callApi}> Proceed </button>
-//                 </p>
-//             </form>
-//             <footer>
-//                 <p><Link to="/">Back to Homepage</Link>.</p>
-//             </footer>
-//         </div>
-//     )
-
-// }
-
-
-//*********************** CODING UPDATED 1.0 ***********************//
-
 import React, { useState,useEffect } from 'react'
 import { Component } from "react"
 import { Link } from 'react-router-dom'
@@ -170,28 +8,6 @@ import { default as ReactSelect } from "react-select";
 
 
 import '../../App.css'
-
-
-// function Child({items}) {
-//     // Problem:
-//     // This will error if `items` is null/undefined
-//     console.log({items})
-//     items = ['a','b','c']
-//     return (
-//       <>
-//         {/* {items.map(item => (
-//           <li key={item.id}>{item.name}</li>
-//         ))} */}
-//         items.map((item) => 
-//         <option key={items}> {items[0]} </option>)
-//         items.map((item) => 
-//         <option key={items}> {items[1]} </option>)
-//         items.map((item) => 
-//         <option key={items}> {items[2]} </option>)
-//       </>
-//     );
-//   }
-
 
 
 export default function SignUpPage({ userInput, onFormChange }) {
@@ -235,22 +51,11 @@ export default function SignUpPage({ userInput, onFormChange }) {
             console.log(allusersarray[i])
             optionList1.push({"value": allusersarray[i], "label":allusersarray[i]});
         }
-        //     console.log(allusersarray[i])
-        // optionList1.append(allusersarray[i]);
+        
       }
     }
 
-
-    // for (let i = 0; i < x; i++) {
-    //     if(allusers){
-    //         console.log(allusersarray[i])
-    //         optionList1.push(allusersarray[i]);
-    //     }
-    //     //     console.log(allusersarray[i])
-    //     // optionList1.append(allusersarray[i]);
-    //   }
-    
-      console.log(optionList1)
+    console.log(optionList1)
 
 
     const Option = (props) => {
@@ -268,19 +73,6 @@ export default function SignUpPage({ userInput, onFormChange }) {
         );
       };
          
-    //allusersarray = ['sd','sds','sdsd']
-    // if(typeof allusersarray !== 'undefined'){
-    //     console.log(allusersarray)
-    //     let optionItems = allusersarray.map((allusersarray, index) => 
-    //     <option key={index}> {allusersarray} </option>);
-    // }
-    
-
-    // let optionItems = allusersarray.map((allusersarray, index) => 
-    // <option key={index}> {allusersarray} </option>
-    // );   
-    
-
     function callApi() {
         // Simple POST request with a JSON body using fetch
 
