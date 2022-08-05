@@ -34,8 +34,13 @@ def customEncrypt(text,d): #text is the input string, n is the number of places 
 def add_user():
     __req_body = flask.request.get_json()
     encrypted_pwd = customEncrypt(__req_body['pwd'],1)
-    db.Users.insert_one({'username': __req_body['username'], 'pwd': encrypted_pwd, 'projects':[]})
-    return flask.jsonify(message="success")
+    __user = db.Users.find_one({"username":__req_body["username"]})
+    print(__user)
+    if __user is None:
+        db.Users.insert_one({'username': __req_body['username'], 'pwd': encrypted_pwd, 'projects':[]})
+        return flask.jsonify(message="success", success=True)
+    else:
+        return flask.jsonify(message="Failed: User already exists!", success=False)
 
 # Get list of all users
 @app.route("/get_users", methods=['GET'])
@@ -90,7 +95,21 @@ def add_project():
     __project = db.Project.find_one({"projectid":__req_body["projectid"]})
     if __project is None:
         db.Project.insert_one({'projectid': __req_body['projectid'], 'projectdesc': __req_body['projectdesc'], 'users':__req_body['users'], 'res_utilized':{}})
+        for user in __req_body['users']:
+            __user = db.Users.find_one({"username":user})
+            print(__user)
+            if __user is not None:
+                if "projects" not in __user.keys():
+                    __user["projects"] = []
+                __user["projects"].append(__req_body["projectid"])
+                __user["projects"] = list(set(__user["projects"])) # remove duplicates
+                print(__user)
+                db.Users.find_one_and_update({"_id": __user["_id"]}, 
+                            {"$set": {"username":__user["username"], "pwd":__user["pwd"],"projects":__user["projects"]}})
+
         return flask.jsonify(message="Project created successfully", success=True)
+        
+        
     else:
         return flask.jsonify(message="Project ID: " + __req_body['projectid'] + " already exists!", success=False)
 
@@ -222,6 +241,23 @@ def get_project():
         return flask.jsonify(message="Failed: No such projectid", success=False)
 
 
+# Join an existing project with projectid
+@app.route("/join_project", methods=['POST'])
+@cross_origin()
+def join_project():
+    __req_body = flask.request.get_json()
+    __project = db.Project.find_one({"projectid":__req_body["projectid"]})
+    if __project is not None:
+        if __req_body["username"] not in __project["users"]:
+            __project["users"].append(__req_body["username"])
+            __project["users"] = list(set(__project["users"])) # remove duplicates
+            db.Project.find_one_and_update({"_id": __project["_id"]}, 
+                    {"$set": {"projectid":__project["projectid"], "projectdesc":__project["projectdesc"],"users":__project["users"],"res_utilized":__project["res_utilized"]}})
+            return flask.jsonify(message="Successfully added " + __req_body["username"] + " to "+ __req_body["projectid"], success=True)
+        return flask.jsonify(message="User already have access to the project", success=False)
+    else:
+        return flask.jsonify(message="Failed: No such projectid", success=False)
+
 
 # Verify login. Checks username and password entered
 @app.route("/verify_user", methods=['POST'])
@@ -239,7 +275,7 @@ def verify_user():
         response={"message":"success","projects":projects}
         return json.dumps(response)
     else:
-        return flask.jsonify(message="failed", success=False)
+        return flask.jsonify(message="Failed: User/password doesn't match!", success=False)
 
 
 
