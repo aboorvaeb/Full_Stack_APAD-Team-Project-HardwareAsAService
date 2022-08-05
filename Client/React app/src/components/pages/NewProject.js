@@ -5,6 +5,9 @@ import Dropdown from 'react-bootstrap/Dropdown';
 import DropdownButton from 'react-bootstrap/DropdownButton';
 import { components } from "react-select";
 import { default as ReactSelect } from "react-select";
+import { useLocation } from 'react-router-dom';
+import { useHistory } from "react-router-dom";
+
 
 
 import '../../App.css'
@@ -20,6 +23,8 @@ export default function SignUpPage({ userInput, onFormChange }) {
     const [username1, setUserName1] = useState('');
     const[data, setData] = useState([{}])
     let users = []
+
+    let history = useHistory();
 
     useEffect(() => {
         const username1 = JSON.parse(localStorage.getItem('loggedin_user'));
@@ -74,17 +79,21 @@ export default function SignUpPage({ userInput, onFormChange }) {
       };
          
     function callApi() {
+        alert("hi")
         // Simple POST request with a JSON body using fetch
 
         console.log(selectedOptions)
         let z  = []
         z.push(username1)
+        alert(z)
 
-        for (let i = 0; i < selectedOptions.length; i++) {
-            z.push(selectedOptions[i].label);
-          }
+        if(selectedOptions) {
+            for (let i = 0; i < selectedOptions.length; i++) {
+                z.push(selectedOptions[i].label);
+            }
+        } 
 
-        console.log(z)
+        alert(z)
 
         const requestOptions = {
             method: 'POST',
@@ -95,13 +104,22 @@ export default function SignUpPage({ userInput, onFormChange }) {
             .then(data => data.json())
             .then(json => {
               //alert(JSON.stringify(json)))
-              if(json.success === true)  {window.location.href = "/resourcemanagement"}
+              if(json.success === true)  {handleState(projectid)}
               else alert(JSON.stringify(json))
             })
+
+        
 
         setProjectid("")
         setProjectdesc("")
             
+      }
+
+      function handleState(temp) {
+        history.push({
+          pathname: "/resourcemanagement",
+          state: temp
+        });
       }
     
       const handleChange = (selected) => {
@@ -127,7 +145,7 @@ export default function SignUpPage({ userInput, onFormChange }) {
     return (
         <div className="text-center m-5-auto">
             <h2>Add a project</h2>
-            <form action="/selectproject">
+            <form>
                 <p>
                     <label>Set Project ID</label><br/>
                     <input type="text" name="projectid"  id="projectid" value={projectid} onChange={(e) => setProjectid(e.target.value)} required/>
@@ -179,9 +197,6 @@ export default function SignUpPage({ userInput, onFormChange }) {
 
                 </div>
                 </form>
-                </p>
-                <p>
-                    <span><a href="https://google.com" target="_blank" rel="noopener noreferrer">add a user</a></span>
                 </p>
                 <p>
                     <button id="sub_btn" type="submit" onClick={callApi}> Proceed </button>
