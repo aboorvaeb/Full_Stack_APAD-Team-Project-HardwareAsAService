@@ -6,6 +6,9 @@ import { useLocation } from 'react-router-dom';
 import ProgressBar from 'react-bootstrap/ProgressBar';
 import { useHistory } from "react-router-dom";
 
+import Form from 'react-bootstrap/Form';
+import Button from 'react-bootstrap/Button';
+
 
 import '../../App.css'
 
@@ -19,15 +22,32 @@ export default function ResourceManagementPage() {
     contentArrayInitial = selectedProject.content
     let project_id = contentArrayInitial.projectid
     let contentArrayLatest = []
-    contentArrayLatest = fetchProjectDetails(project_id)
 
+    const [response, setResponse] = useState();
+    const [responseTest, setResponseTest] = useState();
 
+    
+    const requestOptions = {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({"projectid": project_id})
+        
+    };
+
+    // get_project call
+    fetch('/get_project?'.concat(project_id), requestOptions)
+    .then(data => data.json())
+    .then(json => {
+        setResponse(JSON.stringify(json))
+        console.log(response)
+        localStorage.setItem('getProjectResponse', response);
+    })
+ 
     let requestedUnits = {}
 
     const[hwSetData, setHWSetData] = useState([{}])
     const [hwsetRequest, setHwSetRequest] = useState([])
-    const [response, setResponse] = useState()
-
+    
     useEffect(() => {
         fetch("/get_hardwareset").then(
             res => res.json()
@@ -41,16 +61,44 @@ export default function ResourceManagementPage() {
     
     const [userSelection, setUserSelection] = React.useState(false);
     
-    
     function getHWSetDetails(availability) {
         const now = availability;
         return <ProgressBar now={now} label={`${now}%`} />;
     }
 
     function getUtilized(resourceid) {
-        
-        return contentArrayInitial.res_utilized[resourceid]
+
+        const requestOptions = {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({"projectid": project_id})
+            
+        };
+        // get_project call
+        fetch('/get_project', requestOptions)
+        .then(data => data.json())
+        .then(json => {
+            setResponseTest(JSON.stringify(json))
+            console.log(responseTest)
+            //localStorage.setItem('getProjectResponse', response);
+        })
+
+        try {
+            return responseTest.content.res_utilized[resourceid]
+        } catch(exception) {
+            return contentArrayInitial.res_utilized[resourceid]
+        }
     }
+    
+
+    // console.log(response) 
+    // if(response) {
+    //     console.log(response)
+    //     return ""//response.content.res_utilized[resourceid]
+    // } else {
+    //     return  ""
+    // }
+    
 
     function handleRequest(resourceid, requestedUnit) {
         const newInput = {
@@ -63,7 +111,7 @@ export default function ResourceManagementPage() {
 
     
     function handleSubmit(selectedProject, userSelection) {
-
+        alert(userSelection)
         console.log("check")
         const requestOptions = {
             method: 'POST',
@@ -79,7 +127,7 @@ export default function ResourceManagementPage() {
             .then(data => data.json())
             .then(json => {
                 console.log(json)
-                alert(json)
+                //alert(json)
                 handlePostRequest(json)
             })
         
@@ -88,11 +136,14 @@ export default function ResourceManagementPage() {
 
     function handlePostRequest(jsonResponse) {
         if(jsonResponse.message == "Successfully updated") {
-            alert("Successfully updated")
+            alert(jsonResponse.message)
+           // document.getElementById("util").value  = response.content.res_utilized["HW1"]
             window.location.reload()
+            
+            // update utilized
         }
         else {
-            alert("Re try")
+            alert(jsonResponse.message)
             window.location.reload()
 
         } 
@@ -108,7 +159,9 @@ export default function ResourceManagementPage() {
         fetch('/get_project', requestOptions)
         .then(data => data.json())
         .then(json => {
-            contentArrayLatest = json
+            setResponse(JSON.stringify(json))
+            contentArrayLatest = JSON.stringify(json)
+            console.log(contentArrayLatest)
     })
 
     }
@@ -119,7 +172,7 @@ export default function ResourceManagementPage() {
         <div className="text-center m-5-auto">
         <h2>Project: {project_id}</h2>
           <div>
-            <form>
+          <Form>
             {hwSetData.map(({ resourceid, capacity, availability }) => (       
             <div className="text-center m-5-auto"> 
             <p key={resourceid}> 
@@ -129,7 +182,7 @@ export default function ResourceManagementPage() {
             <p>
             <div>
             <label>Utilized</label><br/>
-            <input type="text" name="request" value={getUtilized(resourceid)} />
+            <input type="text" id = "util" name="request" value={getUtilized(resourceid)} />
             </div>
             </p>
             <p>
@@ -141,16 +194,19 @@ export default function ResourceManagementPage() {
             </p> 
             </div>
             ))}
-            </form>
+            </Form>
 
             <p>
-            <div onChange={(e) => setUserSelection(e.target.value)}>
+            {/* <div onChange={(e) => setUserSelection(e.target.value)}>
             <input type="radio" value="check-in" name="checkin"  style={{ width: 'auto' }}/> Check-in
             <br/>
             <input type="radio" value="check-out" name="checkout"  style={{ width: 'auto' }}/> Check-out
-            </div>
+            </div> */}
             <br/>
-            <button onClick = { () => handleSubmit(project_id, userSelection)}> Submit </button>
+            <Button  value="check-in" onClick = { (e) => handleSubmit(project_id, e.target.value)}> Check-in  </Button>
+            <span></span> <span></span>
+            <Button value="check-out" onClick = { (e) => handleSubmit(project_id, e.target.value)}> Check-out  </Button>
+
             {/* mistake: () => or else binded upon refresh/loading */}
             </p>  
         
