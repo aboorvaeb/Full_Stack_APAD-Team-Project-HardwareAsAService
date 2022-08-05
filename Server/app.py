@@ -14,12 +14,27 @@ app.config["MONGO_URI"] = "mongodb+srv://admin2022:scrumbledore2022@cluster0.ofc
 mongodb_client = PyMongo(app)
 db = mongodb_client.db
 
+def customEncrypt(text,d): #text is the input string, n is the number of places you want to shift, d is the direction you want to shift in
+    n=3
+    encrypted_string=""
+    shift_position = n*d
+    revString = text[::-1] #reverse the string
+    for char in revString:
+        char_value = ord(char)-33
+        mod_value = (char_value + shift_position)%93
+        if mod_value == 0:
+            mod_value = 93
+        encrypted_value = mod_value + 33
+        encrypted_string = encrypted_string + chr(encrypted_value)
+    return encrypted_string
+
 # Add users
 @app.route("/add_user", methods=['POST'])
 @cross_origin()
 def add_user():
     __req_body = flask.request.get_json()
-    db.Users.insert_one({'username': __req_body['username'], 'pwd': __req_body['pwd'], 'projects':[]})
+    encrypted_pwd = customEncrypt(__req_body['pwd'],1)
+    db.Users.insert_one({'username': __req_body['username'], 'pwd': encrypted_pwd, 'projects':[]})
     return flask.jsonify(message="success")
 
 # Get list of all users
@@ -213,7 +228,8 @@ def get_project():
 @cross_origin()
 def verify_user():
     __req_body = flask.request.get_json()
-    __user = db.Users.find_one({"username":__req_body["username"],"pwd":__req_body["pwd"]})
+    encrypted_pwd = customEncrypt(__req_body['pwd'],1)
+    __user = db.Users.find_one({"username":__req_body["username"],"pwd":encrypted_pwd})
     if __user is not None:
         if "projects" not in __user.keys():
             projects = []
