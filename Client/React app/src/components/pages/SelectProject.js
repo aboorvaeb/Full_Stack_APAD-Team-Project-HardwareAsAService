@@ -63,7 +63,7 @@ export default function HomePage(props) {
         <div className="text-center m-5-auto">
             
             <h2>Project</h2>
-            <h5>Select project to proceed</h5>
+            <h5>Select or join a project</h5>
             
             <Form>
                 <Form.Select className="mb-3" size="lg" onChange={e => setSelectedProject(e.target.value)}>
@@ -78,7 +78,7 @@ export default function HomePage(props) {
               </Button>
               <footer>
                 <p><Link to="/newproject">Create a new project</Link>.</p>
-                <p><Link to="/joinproject">Join an exisiting project</Link>.</p>
+                {/* <p><Link to="/joinproject">Join an exisiting project</Link>.</p> */}
             </footer>
             </Form>
             

@@ -44,6 +44,7 @@ export default function SignInPage(props) {
 
           setUserName(username)
           localStorage.setItem('loggedin_user', JSON.stringify(username));
+          localStorage.setItem('loggedin_user_projects', JSON.stringify(resJson.projects));
           window.location.href = "/selectproject"
         } else{
           alert(JSON.stringify(resJson.message))
@@ -73,7 +74,7 @@ export default function SignInPage(props) {
         <div className="text-center m-5-auto">
           <h2>User Login</h2>
           <h5>Login to your account</h5>
-            
+     
             <Form onSubmit={callApi}>
               <Form.Group className="mb-3" controlId="username">
                 <Form.Label>User Name</Form.Label>
