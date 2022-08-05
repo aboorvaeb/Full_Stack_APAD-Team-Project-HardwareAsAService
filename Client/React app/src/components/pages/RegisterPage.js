@@ -1,5 +1,8 @@
 import React, { useState } from 'react'
 import { Link } from 'react-router-dom'
+import Form from 'react-bootstrap/Form';
+import Button from 'react-bootstrap/Button';
+
 
 import '../../App.css'
 
@@ -20,7 +23,7 @@ export default function SignUpPage({ userInput, onFormChange }) {
             .then(data => data.json())
             .then(json => {
               //alert(JSON.stringify(json)))
-              if(json.message === "success")  {window.location.href = "/selectproject"}
+              if(json.message === "success")  {window.location.href = "/login"}
               else alert(JSON.stringify(json))  
             })
           
@@ -56,7 +59,7 @@ export default function SignUpPage({ userInput, onFormChange }) {
             </form>
             <div>
               <p>
-            <button onClick={callApi}>SUBMIT</button>
+            <Button variant="secondary" onClick={callApi}>SUBMIT</Button>
               </p>
             </div>
             <footer>

@@ -24,7 +24,6 @@ export default function HomePage(props) {
                 console.log(data)
                 setProjectsList(data)
                 projList = data
-                alert(JSON.stringify(projList))
             }
         )
     }, [] )
@@ -47,7 +46,6 @@ export default function HomePage(props) {
         fetch('/get_project', requestOptions)
             .then(data => data.json())
             .then(json => {
-              alert(JSON.stringify(json))
               handleState(json);
             })
         
@@ -66,17 +64,7 @@ export default function HomePage(props) {
             
             <h2>Project</h2>
             <h5>Select project to proceed</h5>
-            {/* <form action="/selectproject">     
-                <div>
-                 <div>Selected Project: {selectedProject}</div>
-                 <select onChange={e => setSelectedProject(e.target.value)}>
-                <option value="">Select Project</option>
-                        {projects.map(project => (
-                        <option> {project} </option>
-                    ))}    
-                </select>
-                </div>
-            </form> */}
+            
             <Form>
                 <Form.Select className="mb-3" size="lg" onChange={e => setSelectedProject(e.target.value)}>
                     <option value="">Select Project</option>
