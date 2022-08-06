@@ -50,9 +50,6 @@ export default function SignUpPage({ userInput, onFormChange }) {
                     <label>Set Password</label><br/>
                     <input type="password" name="pwd" id="pwd" value={pwd} onChange={(e) => setPwd(e.target.value)} required />
                 </p>
-                <p>
-                    <input type="checkbox" name="checkbox" id="checkbox" required /> <span>I agree all statements in <a href="https://google.com" target="_blank" rel="noopener noreferrer">terms of service</a></span>.
-                </p>
                 {/* <p>
                     <button id="sub_btn" type="submit">Register</button>
                 </p> */}
