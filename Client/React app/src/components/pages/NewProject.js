@@ -101,7 +101,11 @@ export default function SignUpPage({ userInput, onFormChange }) {
             .then(data => data.json())
             .then(json => {
               //alert(JSON.stringify(json)))
-              if(json.success === true)  {handleState(projectid)}
+              if(json.success === true)  {
+                const userprojects = JSON.parse(localStorage.getItem('loggedin_user_projects'));
+                userprojects.push(projectid);
+                localStorage.setItem('loggedin_user_projects', JSON.stringify(userprojects));
+                handleState(projectid)}
               else alert(JSON.stringify(json.message))
             })
 
