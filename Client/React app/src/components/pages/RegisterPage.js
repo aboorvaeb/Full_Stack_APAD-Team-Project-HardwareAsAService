@@ -23,6 +23,10 @@ export default function SignUpPage({ userInput, onFormChange }) {
             .then(data => data.json())
             .then(json => {
               //alert(JSON.stringify(json)))
+              localStorage.setItem('loggedin_user', JSON.stringify(username));
+              localStorage.setItem('selected_project', null);
+              localStorage.setItem('loggedin_user_projects', null);
+              
               if(json.message === "success")  {window.location.href = "/login"}
               else alert(JSON.stringify(json))  
             })

@@ -79,22 +79,19 @@ export default function SignUpPage({ userInput, onFormChange }) {
       };
          
     function callApi() {
-        alert("hi")
         // Simple POST request with a JSON body using fetch
 
         console.log(selectedOptions)
         let z  = []
         z.push(username1)
-        alert(z)
-
+        
         if(selectedOptions) {
             for (let i = 0; i < selectedOptions.length; i++) {
                 z.push(selectedOptions[i].label);
             }
         } 
 
-        alert(z)
-
+        
         const requestOptions = {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
@@ -105,7 +102,7 @@ export default function SignUpPage({ userInput, onFormChange }) {
             .then(json => {
               //alert(JSON.stringify(json)))
               if(json.success === true)  {handleState(projectid)}
-              else alert(JSON.stringify(json))
+              else alert(JSON.stringify(json.message))
             })
 
         
@@ -116,6 +113,7 @@ export default function SignUpPage({ userInput, onFormChange }) {
       }
 
       function handleState(temp) {
+        localStorage.setItem('selected_project', JSON.stringify(temp));
         history.push({
           pathname: "/resourcemanagement",
           state: temp

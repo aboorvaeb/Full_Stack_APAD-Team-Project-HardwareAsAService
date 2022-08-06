@@ -129,7 +129,7 @@ export default function ResourceManagementPage() {
             "value" : parseInt(hwSetRequest1)
         }
         const updatedInput = [...hwset_1_RequestFinal, newInput]
-        alert(JSON.stringify(updatedInput))
+        //alert(JSON.stringify(updatedInput))
         setHwSetRequestFinal_1(updatedInput)  
         testHWSet1Request = updatedInput
         
@@ -169,8 +169,8 @@ export default function ResourceManagementPage() {
             "requestvalue" : testHWSet2Request})
 
         };
-        alert(JSON.stringify({"projectid": selectedProject, "operation": userSelection, 
-        "requestvalue" : testHWSet2Request}))
+        //alert(JSON.stringify({"projectid": selectedProject, "operation": userSelection, 
+        //"requestvalue" : testHWSet2Request}))
         console.log(JSON.stringify({"projectid": selectedProject, "operation": userSelection, 
         "requestvalue" : testHWSet2Request}))
 

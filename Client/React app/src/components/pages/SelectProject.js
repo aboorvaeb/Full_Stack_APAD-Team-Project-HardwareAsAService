@@ -52,7 +52,6 @@ export default function HomePage(props) {
                     if (json.success){
                         
                         userprojects.push(selectedProject);
-                        alert(userprojects)
                         localStorage.setItem('loggedin_user_projects', JSON.stringify(userprojects));
                         moveToResourceManagementPage = true
                     }

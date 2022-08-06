@@ -44,7 +44,8 @@ const NavBar = () => {
 
 
     function goToResourceManagement(selected_project) {
-      if(selected_project === "Go to all projects"){
+      if(selected_project === "Go to all projects/ Join a new project"){
+        localStorage.setItem('selected_project', JSON.stringify(null));
         window.location.href = "/selectproject"
       }else{
         localStorage.setItem('selected_project', JSON.stringify(selected_project));
