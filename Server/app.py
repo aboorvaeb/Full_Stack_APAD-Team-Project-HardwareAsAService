@@ -94,6 +94,7 @@ def add_project():
     __req_body = flask.request.get_json()
     __project = db.Project.find_one({"projectid":__req_body["projectid"]})
     if __project is None:
+        __req_body['users'] = list(set(__req_body['users'])) # remove duplicates
         db.Project.insert_one({'projectid': __req_body['projectid'], 'projectdesc': __req_body['projectdesc'], 'users':__req_body['users'], 'res_utilized':{}})
         for user in __req_body['users']:
             __user = db.Users.find_one({"username":user})
@@ -253,7 +254,20 @@ def join_project():
             __project["users"] = list(set(__project["users"])) # remove duplicates
             db.Project.find_one_and_update({"_id": __project["_id"]}, 
                     {"$set": {"projectid":__project["projectid"], "projectdesc":__project["projectdesc"],"users":__project["users"],"res_utilized":__project["res_utilized"]}})
+            
+        __user = db.Users.find_one({"username":__req_body["username"]})
+        print(__user)
+        if __user is not None:
+            if "projects" not in __user.keys():
+                __user["projects"] = []
+            __user["projects"].append(__req_body["projectid"])
+            __user["projects"] = list(set(__user["projects"])) # remove duplicates
+            print(__user)
+            db.Users.find_one_and_update({"_id": __user["_id"]}, 
+                        {"$set": {"username":__user["username"], "pwd":__user["pwd"],"projects":__user["projects"]}})
+
             return flask.jsonify(message="Successfully added " + __req_body["username"] + " to "+ __req_body["projectid"], success=True)
+        
         return flask.jsonify(message="User already have access to the project", success=False)
     else:
         return flask.jsonify(message="Failed: No such projectid", success=False)
