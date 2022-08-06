@@ -7,9 +7,12 @@ import Button from 'react-bootstrap/Button';
 import Container from 'react-bootstrap/Container';
 // import Dropdown from 'react-bootstrap/Dropdown';
 import Navbar from 'react-bootstrap/Navbar';
+import { useHistory } from 'react-router-dom';
 // import { AppContext } from '../../AppContext';
 
 const NavBar = () => {
+    let history = useHistory();
+
     const [username, setUserName] = useState("");
     const [userprojects, setUserprojects] = useState([]);
     // const msg = useContext(AppContext)
@@ -41,8 +44,14 @@ const NavBar = () => {
 
 
     function goToResourceManagement(selected_project) {
-      localStorage.setItem('selected_project', JSON.stringify(selected_project));
+      if(selected_project === "Go to all projects"){
+        window.location.href = "/selectproject"
+      }else{
+        localStorage.setItem('selected_project', JSON.stringify(selected_project));
       window.location.href = "/resourcemanagement"
+       handleState(selected_project)
+      }
+      
       
     }
 
@@ -61,17 +70,26 @@ const NavBar = () => {
           
     }
 
+    function handleState(projectId) {
+      history.push({
+          pathname: "/resourcemanagement",
+          state: projectId
+      })
+    }
+
 return (
 	<Navbar bg="dark" variant="dark">
       <Container>
         <Navbar.Brand href="/">Scrumbledore Resource Management</Navbar.Brand>
         <Navbar.Toggle />
+        {/* {username ? <div style="color: #ffffff;">Projects Accessible:</div> : null} */}
         {username ? 
                 <Form.Select onChange={e => goToResourceManagement(e.target.value)}>
-                    <option value="">Select Project</option>
+                    <option value="">Project accessible to user:</option>
                             {userprojects && userprojects.map(project => (
                             <option> {project} </option>
                         ))}    
+                        <option>Go to all projects/ Join a new project</option>
                 </Form.Select>
                 
                 :null}

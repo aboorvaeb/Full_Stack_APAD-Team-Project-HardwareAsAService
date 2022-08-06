@@ -13,8 +13,9 @@ import '../../App.css'
 
 export default function HomePage(props) {
 
-    const [projectsList, setProjectsList] = useState([{}]);
-    let projList = []
+    let history = useHistory();
+
+    const [projectsList, setProjectsList] = useState(["hello"]);
 
     useEffect(() => {
         fetch("/get_allprojects").then(
@@ -22,53 +23,80 @@ export default function HomePage(props) {
         ).then(
             data => {
                 console.log(data)
-                setProjectsList(data)
-                projList = data
+                setProjectsList(data["projects"])
             }
         )
-    }, [] )
-    let history = useHistory();
-    const [selectedProject, setSelectedProject] = useState('');
-    let projects = []
-    const location = useLocation()
 
-    projects = location.state
-    console.log(projects)
+
+    }, [] )
+    
+    const [selectedProject, setSelectedProject] = useState('');
+
 
     function callApi() {
+        const userprojects = JSON.parse(localStorage.getItem('loggedin_user_projects'));
+        let moveToResourceManagementPage = true
+        if (!userprojects.includes(selectedProject)){
+            if (window.confirm("You don't have access to this project.\nDo you want to add yourself to the selected project?")) {
+                
+                const username = JSON.parse(localStorage.getItem('loggedin_user'));
+                const requestOptions = {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({"projectid": selectedProject,"username":username})   
+                };
+            
+                fetch('/join_project', requestOptions)
+                .then(data => data.json())
+                .then(json => {
+                    if (json.success){
+                        
+                        userprojects.push(selectedProject);
+                        alert(userprojects)
+                        localStorage.setItem('loggedin_user_projects', JSON.stringify(userprojects));
+                        moveToResourceManagementPage = true
+                    }
+                    else{
+                        alert(json.message)
+                        moveToResourceManagementPage = false
+                    }
+                } )
 
-        const requestOptions = {
-            method: 'POST',
-            headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({"projectid": selectedProject})
-        };
+
+
+
+
+                // moveToResourceManagementPage = true
+            }else{
+                moveToResourceManagementPage = false
+            }
+        }
+        if (moveToResourceManagementPage){
+            localStorage.setItem('selected_project', JSON.stringify(selectedProject));
+            window.location.href = "/resourcemanagement"
+            handleState(selectedProject)
         
-        fetch('/get_project', requestOptions)
-            .then(data => data.json())
-            .then(json => {
-              handleState(json);
-            })
+        }
         
     }
 
-    function handleState(temp) {
+    function handleState(projectId) {
         history.push({
-          pathname: "/resourcemanagement",
-          state: temp
-        });
-      }
+            pathname: "/resourcemanagement",
+            state: projectId
+        })
+    }
 
-    
     return (
         <div className="text-center m-5-auto">
             
-            <h2>Project</h2>
-            <h5>Select or join a project</h5>
+            <h2>All Available Projects</h2>
+            <p>Select project or join the project to which you need to manage the resources</p>
             
             <Form>
                 <Form.Select className="mb-3" size="lg" onChange={e => setSelectedProject(e.target.value)}>
                     <option value="">Select Project</option>
-                            {projects.map(project => (
+                            {projectsList.map(project => (
                             <option> {project} </option>
                         ))}    
                 </Form.Select>

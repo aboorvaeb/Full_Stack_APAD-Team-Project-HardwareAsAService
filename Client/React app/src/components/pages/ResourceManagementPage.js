@@ -20,7 +20,7 @@ export default function ResourceManagementPage() {
     const location = useLocation()
     selectedProject = location.state
 
-    let project_id = selectedProject
+    const [project_id, setProject_id] = useState(selectedProject);
     
     const [hwSetData1_dup, setHWSetData1_dup] = useState()
     const [hwSetData2_dup, setHWSetData2_dup] = useState()
@@ -53,6 +53,16 @@ export default function ResourceManagementPage() {
     let testHWSet2Request = []
 
     useEffect(() => {
+        const project_id = JSON.parse(localStorage.getItem('selected_project'));
+        // alert(username)
+        if (project_id) {
+            setProject_id(project_id);
+        }
+        else{
+            setProject_id()
+        }
+
+
         fetch("/get_hardwareset").then(
             res => res.json()
         ).then(

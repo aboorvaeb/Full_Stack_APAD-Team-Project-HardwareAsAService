@@ -39,8 +39,8 @@ export default function SignInPage(props) {
       if (res.status === 200) {
         if(resJson.message === "success"){
           testList =  resJson.projects
-          temp = testList
-          handleState(temp);
+          // temp = testList
+          // handleState(temp);
 
           setUserName(username)
           localStorage.setItem('loggedin_user', JSON.stringify(username));
@@ -58,16 +58,16 @@ export default function SignInPage(props) {
     }
   };
 
-    function handleState(temp) {
-      testemp = temp
-      console.log(testemp)
-      history.push({
-        pathname: "/selectproject",
-        state: temp
-      });
+    // function handleState(temp) {
+    //   testemp = temp
+    //   console.log(testemp)
+    //   history.push({
+    //     pathname: "/selectproject",
+    //     state: temp
+    //   });
       
 
-    }
+    // }
       
     
     return (
