@@ -35,7 +35,7 @@ export default function SignUpPage({ userInput, onFormChange }) {
             setUserName1()
         }
         console.log(username1)
-        fetch("/get_users").then(
+        fetch("https://scrumbledore-server.herokuapp.com/get_users").then(
             res => res.json()
         ).then(
             data => {
@@ -97,7 +97,7 @@ export default function SignUpPage({ userInput, onFormChange }) {
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify({"projectid": projectid,"projectdesc": projectdesc,"users": z})
         };
-        fetch('/add_project', requestOptions)
+        fetch('https://scrumbledore-server.herokuapp.com/add_project', requestOptions)
             .then(data => data.json())
             .then(json => {
               //alert(JSON.stringify(json)))

@@ -30,7 +30,7 @@ export default function SignInPage(props) {
       e.preventDefault();
       let testList = []
     try {
-      let res = await fetch("/verify_user", {
+      let res = await fetch("https://scrumbledore-server.herokuapp.com/verify_user", {
         method: "POST",
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({"username": username,"pwd": pwd}),

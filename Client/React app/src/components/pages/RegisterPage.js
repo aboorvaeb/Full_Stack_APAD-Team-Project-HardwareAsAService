@@ -19,14 +19,14 @@ export default function SignUpPage({ userInput, onFormChange }) {
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify({"username": username,"pwd": pwd})
         };
-        fetch('/add_user', requestOptions)
+        fetch('https://scrumbledore-server.herokuapp.com/add_user', requestOptions)
             .then(data => data.json())
             .then(json => {
               //alert(JSON.stringify(json)))
               localStorage.setItem('loggedin_user', JSON.stringify(username));
               localStorage.setItem('selected_project', null);
-              localStorage.setItem('loggedin_user_projects', null);
-              
+              localStorage.setItem('loggedin_user_projects', JSON.stringify([]));
+
               if(json.message === "success")  {window.location.href = "/login"}
               else alert(JSON.stringify(json))  
             })

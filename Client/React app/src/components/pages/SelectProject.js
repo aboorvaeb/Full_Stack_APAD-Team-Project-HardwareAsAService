@@ -18,7 +18,7 @@ export default function HomePage(props) {
     const [projectsList, setProjectsList] = useState(["hello"]);
 
     useEffect(() => {
-        fetch("/get_allprojects").then(
+        fetch("https://scrumbledore-server.herokuapp.com/get_allprojects").then(
             res => res.json()
         ).then(
             data => {
@@ -35,7 +35,7 @@ export default function HomePage(props) {
 
     function callApi() {
         const userprojects = JSON.parse(localStorage.getItem('loggedin_user_projects'));
-        let moveToResourceManagementPage = true
+        
         if (!userprojects.includes(selectedProject)){
             if (window.confirm("You don't have access to this project.\nDo you want to add yourself to the selected project?")) {
                 
@@ -46,36 +46,32 @@ export default function HomePage(props) {
                     body: JSON.stringify({"projectid": selectedProject,"username":username})   
                 };
             
-                fetch('/join_project', requestOptions)
+                fetch('https://scrumbledore-server.herokuapp.com/join_project', requestOptions)
                 .then(data => data.json())
                 .then(json => {
                     if (json.success){
-                        
                         userprojects.push(selectedProject);
                         localStorage.setItem('loggedin_user_projects', JSON.stringify(userprojects));
-                        moveToResourceManagementPage = true
+                        window.dispatchEvent(new Event("loggedin_user_projects_updated"));
+
+                        localStorage.setItem('selected_project', JSON.stringify(selectedProject));
+                        window.location.href = "/resourcemanagement"
+                        handleState(selectedProject)
+
+
                     }
                     else{
                         alert(json.message)
-                        moveToResourceManagementPage = false
                     }
                 } )
-
-
-
-
-
-                // moveToResourceManagementPage = true
-            }else{
-                moveToResourceManagementPage = false
             }
         }
-        if (moveToResourceManagementPage){
-            localStorage.setItem('selected_project', JSON.stringify(selectedProject));
-            window.location.href = "/resourcemanagement"
-            handleState(selectedProject)
+        // if (moveToResourceManagementPage){
+        //     localStorage.setItem('selected_project', JSON.stringify(selectedProject));
+        //     window.location.href = "/resourcemanagement"
+        //     handleState(selectedProject)
         
-        }
+        // }
         
     }
 

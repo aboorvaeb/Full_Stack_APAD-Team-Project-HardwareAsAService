@@ -20,7 +20,7 @@ export default function JoinProjectPage(props) {
     let projList = []
 
     useEffect(() => {
-        fetch("/get_allprojects").then(
+        fetch("https://scrumbledore-server.herokuapp.com/get_allprojects").then(
             res => res.json()
         ).then(
             data => {

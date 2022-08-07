@@ -63,7 +63,7 @@ export default function ResourceManagementPage() {
         }
 
 
-        fetch("/get_hardwareset").then(
+        fetch("https://scrumbledore-server.herokuapp.com/get_hardwareset").then(
             res => res.json()
         ).then(
             data => {
@@ -91,7 +91,7 @@ export default function ResourceManagementPage() {
         body: JSON.stringify({"projectid": project_id})   
     };
 
-    fetch('/get_project', requestOptions)
+    fetch('https://scrumbledore-server.herokuapp.com/get_project', requestOptions)
     .then(data => data.json())
     .then(json => {
         console.log(json)
@@ -141,7 +141,7 @@ export default function ResourceManagementPage() {
 
         };
         
-        fetch('/resource_management', requestOptions)
+        fetch('https://scrumbledore-server.herokuapp.com/resource_management', requestOptions)
             .then(data => data.json())
             .then(json => {
                 if(json.message === "Successfully updated") {
@@ -174,7 +174,7 @@ export default function ResourceManagementPage() {
         console.log(JSON.stringify({"projectid": selectedProject, "operation": userSelection, 
         "requestvalue" : testHWSet2Request}))
 
-        fetch('/resource_management', requestOptions)
+        fetch('https://scrumbledore-server.herokuapp.com/resource_management', requestOptions)
             .then(data => data.json())
             .then(json => {
                 if(json.message === "Successfully updated") {

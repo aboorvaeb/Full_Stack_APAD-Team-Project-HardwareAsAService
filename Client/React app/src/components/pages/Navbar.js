@@ -13,15 +13,15 @@ import { useHistory } from 'react-router-dom';
 const NavBar = () => {
     let history = useHistory();
 
-    const [username, setUserName] = useState("");
-    const [userprojects, setUserprojects] = useState([]);
+    let [username, setUserName] = useState("");
+    let [userprojects, setUserprojects] = useState([]);
     // const msg = useContext(AppContext)
     // const {appvalue, setAppvalue} = useContext(AppContext);
 
     // const [items, setItems] = useState([]);
 
     useEffect(() => {
-      const username = JSON.parse(localStorage.getItem('loggedin_user'));
+      let username = JSON.parse(localStorage.getItem('loggedin_user'));
       // alert(username)
       if (username) {
         setUserName(username);
@@ -30,7 +30,13 @@ const NavBar = () => {
         setUserName()
       }
 
-      const userprojects = JSON.parse(localStorage.getItem('loggedin_user_projects'));
+      if (username !== null){
+        userprojects = JSON.parse(localStorage.getItem('loggedin_user_projects'));
+      }
+      else{
+        localStorage.setItem('loggedin_user_projects', JSON.stringify([]));
+        userprojects = []
+      }
       // alert(username)
       if (userprojects) {
         setUserprojects(userprojects);
@@ -41,6 +47,23 @@ const NavBar = () => {
 
       
     }, []);
+
+  //   window.addEventListener('loggedin_user_projects_updated', () => {
+  //     if (username !== null){
+  //       const userprojects = JSON.parse(localStorage.getItem('loggedin_user_projects'));
+  //     }
+  //     else{
+  //       localStorage.setItem('loggedin_user_projects', JSON.stringify([]));
+  //       const userprojects = []
+  //     }
+  //     // alert(username)
+  //     if (userprojects) {
+  //       setUserprojects(userprojects);
+  //     }
+  //     else{
+  //       setUserprojects()
+  //     }
+  // })
 
 
     function goToResourceManagement(selected_project) {
@@ -62,7 +85,7 @@ const NavBar = () => {
       if (window.confirm('Confirming will proceed to logging you of from this session')) {
         localStorage.setItem('loggedin_user', null);
         localStorage.setItem('selected_project', null);
-        localStorage.setItem('loggedin_user_projects', null);
+        localStorage.setItem('loggedin_user_projects', JSON.stringify([]));
 
         setUserName(null)
         window.location.href = "/"
