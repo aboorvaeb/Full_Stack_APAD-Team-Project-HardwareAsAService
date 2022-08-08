@@ -27,7 +27,7 @@ export default function SignUpPage({ userInput, onFormChange }) {
               localStorage.setItem('selected_project', null);
               localStorage.setItem('loggedin_user_projects', JSON.stringify([]));
 
-              if(json.message === "success")  {window.location.href = "/login"}
+              if(json.message === "success")  {window.location.href = "/selectproject"}
               else alert(JSON.stringify(json))  
             })
           

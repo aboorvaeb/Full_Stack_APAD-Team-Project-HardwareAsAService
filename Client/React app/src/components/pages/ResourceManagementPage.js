@@ -105,7 +105,7 @@ export default function ResourceManagementPage() {
 
     function getHWSetDetails(availability) {
         const now = availability;
-        return <ProgressBar variant="secondary" now={now} label={`${now}%`} />;
+        return <ProgressBar variant="secondary" now={now} label={`${now}`} />;
     }
 
 
@@ -197,8 +197,8 @@ export default function ResourceManagementPage() {
         <p> HWSet 1 </p>
         {getHWSetDetails(hwSetData1_dup)}
         <p> {getAvailability(hwSetData1_dup, hwSetData1Cap_dup)} </p>
-        <Form.Label> Utilized by {project_id} </Form.Label>
-        <input type="text" value= {HWSet1Util} />
+        <Form.Label> Utilized by {project_id}: </Form.Label>
+        <input disabled="true" type="text" value= {HWSet1Util} />
         <Form.Label> Request </Form.Label>
         <input type = "text" onChange={(e) => handleRequestHWSet1("HW1", e.target.value)} />
         <br/>
@@ -216,8 +216,8 @@ export default function ResourceManagementPage() {
         <p>{hwSetDataAvailabilty_2}</p>
         {getHWSetDetails(hwSetData2_dup)}
         <p> {getAvailability(hwSetData2_dup, hwSetData2Cap_dup)} </p>
-        <Form.Label> Utilized by {project_id}  </Form.Label>
-        <input type="text" value= {HWSet2Util} />
+        <Form.Label> Utilized by {project_id}:  </Form.Label>
+        <input disabled="true" type="text" value= {HWSet2Util} />
         <Form.Label>Request </Form.Label>
         <input type = "text" onChange={(e) => handleRequestHWSet2("HW2", e.target.value)} />
         <br/>
