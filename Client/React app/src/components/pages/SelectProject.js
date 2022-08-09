@@ -65,6 +65,10 @@ export default function HomePage(props) {
                     }
                 } )
             }
+        }else{
+            localStorage.setItem('selected_project', JSON.stringify(selectedProject));
+            window.location.href = "/resourcemanagement"
+            handleState(selectedProject)
         }
         // if (moveToResourceManagementPage){
         //     localStorage.setItem('selected_project', JSON.stringify(selectedProject));
