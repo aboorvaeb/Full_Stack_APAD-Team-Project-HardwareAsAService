@@ -1,3 +1,4 @@
+// Resource management page that takes care of the check-in check-out process
 import React, { useState, useEffect } from 'react'
 import { Link } from 'react-router-dom'
 import Dropdown from 'react-bootstrap/Dropdown';
@@ -52,6 +53,7 @@ export default function ResourceManagementPage() {
     let testHWSet1Request = []
     let testHWSet2Request = []
 
+    // set the project id value from local storage
     useEffect(() => {
         const project_id = JSON.parse(localStorage.getItem('selected_project'));
         // alert(username)
@@ -63,6 +65,7 @@ export default function ResourceManagementPage() {
         }
 
 
+        // call the get_hw set api to populate the capacity, availability values
         fetch("https://scrumbledore-server.herokuapp.com/get_hardwareset").then(
             res => res.json()
         ).then(
@@ -91,6 +94,8 @@ export default function ResourceManagementPage() {
         body: JSON.stringify({"projectid": project_id})   
     };
 
+
+    // call the get_project api to poulate utilized resources value
     fetch('https://scrumbledore-server.herokuapp.com/get_project', requestOptions)
     .then(data => data.json())
     .then(json => {
@@ -123,13 +128,13 @@ export default function ResourceManagementPage() {
         setHWSetRequest2(requestedUnit)
      }
 
+    // on submit build the request body and send it to resource_management
     function handleSubmitHardwareSet1(selectedProject, userSelection) {
         const newInput = {
             "resourceid" : "HW1",
             "value" : parseInt(hwSetRequest1)
         }
         const updatedInput = [...hwset_1_RequestFinal, newInput]
-        //alert(JSON.stringify(updatedInput))
         setHwSetRequestFinal_1(updatedInput)  
         testHWSet1Request = updatedInput
         
@@ -169,8 +174,6 @@ export default function ResourceManagementPage() {
             "requestvalue" : testHWSet2Request})
 
         };
-        //alert(JSON.stringify({"projectid": selectedProject, "operation": userSelection, 
-        //"requestvalue" : testHWSet2Request}))
         console.log(JSON.stringify({"projectid": selectedProject, "operation": userSelection, 
         "requestvalue" : testHWSet2Request}))
 

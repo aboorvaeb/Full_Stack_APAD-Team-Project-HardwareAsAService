@@ -33,39 +33,7 @@ export default function JoinProjectPage(props) {
   
     function callApi() {
 
-        // const requestOptionsGetProject = {
-        //     method: 'POST',
-        //     headers: { 'Content-Type': 'application/json' },
-        //     body: JSON.stringify({"projectid": selectedProject})
-
-        // };
-       
-        // fetch('/get_project', requestOptionsGetProject)
-        //     .then(data => data.json())
-        //     .then(json => {
-        //         console.log(json)
-        //         alert(json)
-        //     })
-
-
-        // const requestOptionsAddProject = {
-        //         method: 'POST',
-        //         headers: { 'Content-Type': 'application/json' },
-        //         body: JSON.stringify({"projectid": selectedProject})
-    
-        // };
-           
-        // fetch('/get_project', requestOptionsAddProject)
-        //         .then(data => data.json())
-        //         .then(json => {
-        //             console.log(json)
-        //             alert(json)
-        // })
         
-    }
-
-
-    
     return (
         <div className="text-center m-5-auto">
             
